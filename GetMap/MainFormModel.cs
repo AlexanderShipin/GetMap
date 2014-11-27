@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GetMap
 {
@@ -6,8 +7,13 @@ namespace GetMap
 	{
 		public static string DefaultMapPath = "C:\\GetMapTmp\\GetMap{0}.png";
 
-		public string MapSourceFormat { get; set; }
 		public string MapSourceName { get; set; }
+
+		private List<string> _mapSourceFormat = new List<string>();
+		public List<string> MapSourceFormat
+		{
+			get { return _mapSourceFormat; }
+		}
 
 		private float _leftTopLat;
 		public float LeftTopLat

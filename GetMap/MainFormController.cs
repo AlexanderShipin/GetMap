@@ -185,14 +185,37 @@ namespace GetMap
 
 		private void LoadAndAttachTileToMap(Graphics graphics, MainFormModel model, int leftTopX, int leftTopY, int i, int j, int idlTileNumber)
 		{
-			try
-			{
-				LoadTile(model, tilesDirectory, i, j);
-			}
-			catch(WebException)
-			{
-				//tile doesn't exist
-			}
+			if (!File.Exists(String.Format(FileFormatString, tilesDirectory, model.MapSourceName, i, j, model.Zoom)))
+				using (var tile = new Bitmap(tileSize, tileSize))
+				{
+					using (Graphics tileGraphics = Graphics.FromImage(tile))
+					{
+						tileGraphics.CompositingQuality = CompositingQuality.HighSpeed;
+						tileGraphics.InterpolationMode = InterpolationMode.Low;
+						tileGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+						tileGraphics.DrawImage(tile, 0, 0, tileSize, tileSize);
+
+						try
+						{
+							foreach (string sourceFormat in model.MapSourceFormat)
+							{
+								if (!string.IsNullOrEmpty(sourceFormat))
+									tileGraphics.DrawImage(LoadTile(sourceFormat, i, j, model.Zoom), 0, 0, tileSize, tileSize);
+							}
+						}
+						catch (WebException)
+						{
+							//tile doesn't exist
+						}
+					}
+
+					var eps = new EncoderParameters(1);
+					eps.Param[0] = new EncoderParameter(Encoder.Quality, imageQuality);
+
+					var pngCodec = getEncoderInfo("image/png");
+					tile.Save(String.Format(FileFormatString, tilesDirectory, model.MapSourceName, i, j, model.Zoom), pngCodec, eps);
+				}
+
 			Bitmap tileFile = null;
 			try
 			{
@@ -212,18 +235,16 @@ namespace GetMap
 			}
 		}
 
-		private void LoadTile(MainFormModel model, string path, int x, int y)
+		private Image LoadTile(string mapSourceFormat, int x, int y, int zoom)
 		{
-			if (File.Exists(String.Format(FileFormatString, path, model.MapSourceName, x, y, model.Zoom)))
-				return;
-
-			var authRequest = (HttpWebRequest)WebRequest.Create(string.Format(model.MapSourceFormat, x, y, model.Zoom));
+			var authRequest = (HttpWebRequest)WebRequest.Create(string.Format(mapSourceFormat, x, y, zoom));
 			authRequest.Method = "GET";
 			authRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.1.3)";//for Google
 			var authResponse = (HttpWebResponse)authRequest.GetResponse();
 			var tile = Image.FromStream(authResponse.GetResponseStream());
-			tile.Save(String.Format(FileFormatString, path, model.MapSourceName, x, y, model.Zoom));
+//			tile.Save(String.Format(FileFormatString, path, mapSourceName, x, y, zoom));
 			authResponse.Close();
+			return tile;
 		}
 	}
 }

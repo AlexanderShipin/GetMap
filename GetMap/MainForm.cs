@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -16,10 +17,10 @@ namespace GetMap
 			{
 				{"Google map", new KeyValuePair<string, string>("GoogleMap", "http://mts.google.com/vt/x={0}&y={1}&z={2}&hl=en")},
 				{"Google satellite", new KeyValuePair<string, string>("GoogleSatellite", "http://khms.google.com/kh/v=159&x={0}&y={1}&z={2}")},
-				//for hybrid https://mts.google.com/vt/x={0}&y={1}&z={2}&hl=en
+				{"Google hybrid", new KeyValuePair<string, string>("GoogleHybrid", "https://mts.google.com/vt/lyrs=h&x={0}&y={1}&z={2}&hl=en")},
 				{"Yandex map", new KeyValuePair<string, string>("YandexMap", "http://vec.maps.yandex.net/tiles?l=map&x={0}&y={1}&z={2}&lang=ru_RU")},
 				{"Yandex satellite", new KeyValuePair<string, string>("YandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&x={0}&y={1}&z={2}&lang=ru_RU")},
-				//for hybrid http://vec.maps.yandex.net/tiles?l=skl&x={0}&y={1}&z={2}&lang=ru_RU
+				{"Yandex hybrid", new KeyValuePair<string, string>("YandexHybrid", "http://vec.maps.yandex.net/tiles?l=skl&x={0}&y={1}&z={2}&lang=ru_RU")},
 			};
 		private Regex regExCoordinate = new Regex(@"-?\d+(\.\d+)?");
 		private Regex regExTwoCoordinates = new Regex(@"(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+");
@@ -92,11 +93,26 @@ namespace GetMap
 				               out rightBottomLng);
 		}
 
+		private bool IsHybridLayer(string layerName)
+		{
+			return layerName.Contains("Hybrid");
+		}
+
 		#endregion
 
 		private void FillModel(MainFormModel mainFormModel, bool showMessage = true)
 		{
-			mainFormModel.MapSourceFormat = ((KeyValuePair<string, KeyValuePair<string, string>>)sourceComboBox.SelectedItem).Value.Value;
+			var selectedValue = ((KeyValuePair<string, KeyValuePair<string, string>>) sourceComboBox.SelectedItem).Value;
+			if (IsHybridLayer(selectedValue.Key))
+			{
+				var satelliteFormatPair = providers.Values.FirstOrDefault(v => v.Key == selectedValue.Key.Replace("Hybrid", "Satellite"));
+				mainFormModel.MapSourceFormat.Add(satelliteFormatPair.Value);
+				mainFormModel.MapSourceFormat.Add(selectedValue.Value);
+			}
+			else
+			{
+				mainFormModel.MapSourceFormat.Add(selectedValue.Value);
+			}
 			mainFormModel.MapSourceName = ((KeyValuePair<string, KeyValuePair<string, string>>)sourceComboBox.SelectedItem).Value.Key;
 			mainFormModel.LeftTopLat = float.Parse(leftTopLatTextBox.Text, CultureInfo.InvariantCulture);
 			mainFormModel.LeftTopLon = float.Parse(leftTopLonTextBox.Text, CultureInfo.InvariantCulture);
