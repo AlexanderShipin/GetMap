@@ -36,7 +36,7 @@ namespace GetMap
 			int mapWidth;
 			int mapHeight;
 			int internationalDateLineTileNumber = strategy.X(180, model.Zoom) - 1;
-			if(rightBottomX >= leftTopX)
+			if (model.RightBottomLon > model.LeftTopLon)
 			{
 				mapWidth = tileSize * (rightBottomX - leftTopX + 1);
 				mapHeight = tileSize * (rightBottomY - leftTopY + 1);
@@ -141,7 +141,7 @@ namespace GetMap
 
 		private void AttachTilesToMap(Graphics graphics, MainFormModel model, int leftTopX, int leftTopY, int rightBottomX, int rightBottomY, int idlTileNumber)
 		{
-			if(leftTopX <= rightBottomX)
+			if (model.LeftTopLon < model.RightBottomLon)
 			{
 				for(int i = leftTopX; i <= rightBottomX; i++)
 				{
