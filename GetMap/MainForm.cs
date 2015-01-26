@@ -17,7 +17,7 @@ namespace GetMap
 			{
 				{"Google map", new KeyValuePair<string, string>("GoogleMap", "http://mts.google.com/vt/x={0}&y={1}&z={2}&hl=en")},
 				{"Google satellite", new KeyValuePair<string, string>("GoogleSatellite", "http://khms.google.com/kh/v=159&x={0}&y={1}&z={2}")},
-				{"Google hybrid", new KeyValuePair<string, string>("GoogleHybrid", "https://mts.google.com/vt/lyrs=h&x={0}&y={1}&z={2}&hl=en")},
+				{"Google hybrid", new KeyValuePair<string, string>("GoogleHybrid", "http://mts.google.com/vt/lyrs=h&x={0}&y={1}&z={2}&hl=en")},
 				{"Yandex map", new KeyValuePair<string, string>("YandexMap", "http://vec.maps.yandex.net/tiles?l=map&x={0}&y={1}&z={2}&lang=ru_RU")},
 				{"Yandex satellite", new KeyValuePair<string, string>("YandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&x={0}&y={1}&z={2}&lang=ru_RU")},
 				{"Yandex hybrid", new KeyValuePair<string, string>("YandexHybrid", "http://vec.maps.yandex.net/tiles?l=skl&x={0}&y={1}&z={2}&lang=ru_RU")},
@@ -119,16 +119,20 @@ namespace GetMap
 			mainFormModel.RightBottomLat = float.Parse(rightBottomLatTextBox.Text, CultureInfo.InvariantCulture);
 			mainFormModel.RightBottomLon = float.Parse(rightBottomLonTextBox.Text, CultureInfo.InvariantCulture);
 			mainFormModel.Zoom = zoomTrackBar.Value;
-			if(!String.IsNullOrEmpty(pathTextBox.Text))
+			if (pathTextBox.Text == MainFormModel.DefaultMapPath)
 			{
-				mainFormModel.Path = pathTextBox.Text;
+				mainFormModel.Path = MainFormModel.DefaultMapPath + String.Format(MainFormModel.DefaultFileName, selectedValue.Key + "_" +
+																												 mainFormModel.LeftTopLat.ToString(CultureInfo.GetCultureInfo("en-us")) + "," +
+																												 mainFormModel.LeftTopLon.ToString(CultureInfo.GetCultureInfo("en-us")) + ";" +
+																												 mainFormModel.RightBottomLat.ToString(CultureInfo.GetCultureInfo("en-us")) + "," +
+																												 mainFormModel.RightBottomLon.ToString(CultureInfo.GetCultureInfo("en-us")) + "_" +
+																												 mainFormModel.Zoom);
+				if (showMessage)
+					MessageBox.Show(String.Format(Resources.MainForm_MapPathNotEntered, mainFormModel.Path), Resources.MainForm_Warning, MessageBoxButtons.OK);
 			}
 			else
 			{
-				mainFormModel.Path = String.Format(MainFormModel.DefaultMapPath, "1");
-				if(showMessage)
-					MessageBox.Show(String.Format(Resources.MainForm_MapPathNotEntered, mainFormModel.Path), Resources.MainForm_Warning, MessageBoxButtons.OK);
-				pathTextBox.Text = mainFormModel.Path;
+				mainFormModel.Path = pathTextBox.Text;
 			}
 		}
 
@@ -138,6 +142,7 @@ namespace GetMap
 		{
 			buildMapButton.Enabled = false;
 			cancelButton.Enabled = true;
+			buildingStatusLabel.Text = String.Empty;
 			try
 			{
 				model = new MainFormModel();
@@ -278,6 +283,7 @@ namespace GetMap
 				return false;
 			};
 
+			string errorMsg = string.Empty;
 			var timeStart = Stopwatch.StartNew();
 			try
 			{
@@ -285,11 +291,11 @@ namespace GetMap
 			}
 			catch (Exception ex)
 			{
-				e.Result = new { Error = ex.Message };
+				errorMsg = ex.Message;
 			}
 			timeStart.Stop();
 
-			e.Result = new { Error = string.Empty, Time = timeStart.Elapsed };
+			e.Result = new { Error = errorMsg, Time = timeStart.Elapsed };
 		}
 
 		#endregion

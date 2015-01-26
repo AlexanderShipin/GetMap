@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GetMap
 {
 	public class MainFormModel
 	{
-		public static string DefaultMapPath = "C:\\GetMapTmp\\GetMap{0}.png";
+		public static string DefaultMapPath = "C:\\GetMapTmp\\";
+		public static string DefaultFileName = "{0}.png";
 
 		public string MapSourceName { get; set; }
 

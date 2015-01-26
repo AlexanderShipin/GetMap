@@ -225,6 +225,7 @@
 			this.pathTextBox.Size = new System.Drawing.Size(247, 20);
 			this.pathTextBox.TabIndex = 0;
 			this.pathTextBox.TabStop = false;
+			this.pathTextBox.Text = MainFormModel.DefaultMapPath;
 			// 
 			// pathButton
 			// 

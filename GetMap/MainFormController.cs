@@ -15,11 +15,12 @@ namespace GetMap
 		private string tilesDirectory = "C:\\GetMapTmp\\";
 		private static int tileSize = 256;
 		private long imageQuality = 80;
-		private int maxMapWidthHeight = 10000 / tileSize * tileSize;
+		private int maxMapWidthHeight = 7000 / tileSize * tileSize;
 
 		public delegate bool CheckCancellationHandler();
 		public event CheckCancellationHandler CheckCancellation;
 
+		//todo: refactor this method
 		public void GetMap(MainFormModel model, BackgroundWorker worker, DoWorkEventArgs e)
 		{
 			var strategyCreator = new StrategyCreator();
@@ -51,7 +52,21 @@ namespace GetMap
 
 			//todo: dialog whether the user wants too many big maps here
 			int splitedByWidthMapsQuantity = (int) Math.Ceiling((decimal) (mapWidth) / maxMapWidthHeight);
-			int splitedByHeightMapsQuantity = (int) Math.Ceiling((decimal) (mapHeight) / maxMapWidthHeight);
+			int splitedByHeightMapsQuantity = (int)Math.Ceiling((decimal)(mapHeight) / maxMapWidthHeight);
+
+			string fileName = "no_file_name";
+			if (splitedByWidthMapsQuantity > 1 || splitedByHeightMapsQuantity > 1)
+			{
+				//to avoid situation when map is saved to existing file but actually will be saved in several files (with old name and suffixes)
+				if (File.Exists(model.Path))
+					File.Delete(model.Path);
+
+				fileName = Path.GetFileNameWithoutExtension(model.Path);
+				Directory.CreateDirectory(Path.GetDirectoryName(model.Path) + "\\" + fileName);
+
+				model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "\\" + Path.GetFileName(model.Path);
+			}
+
 			for (int i = 0; i < splitedByHeightMapsQuantity; i++)
 			{
 				for (int j = 0; j < splitedByWidthMapsQuantity; j++)
@@ -68,7 +83,9 @@ namespace GetMap
 					if (currentRightButtomX > internationalDateLineTileNumber)
 						currentRightButtomX = currentRightButtomX - internationalDateLineTileNumber - 1;
 
-					model.Path = String.Format(MainFormModel.DefaultMapPath, (i + 1) + "-" + (j + 1));
+					if (splitedByWidthMapsQuantity > 1 || splitedByHeightMapsQuantity > 1)
+						model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "-" + (i + 1) + "-" + (j + 1) + ".png";
+					
 					LoadTilesAndSaveMap(model, currentMapWidth, currentMapHeight, currentLeftTopX, currentLeftTopY, currentRightButtomX, currentRightButtomY, internationalDateLineTileNumber);
 				}
 			}

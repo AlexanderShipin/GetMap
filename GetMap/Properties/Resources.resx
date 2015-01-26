@@ -133,7 +133,7 @@
     <value>Invalid map size. Width and Height should be more than zero</value>
   </data>
   <data name="MainForm_MapPathNotEntered" xml:space="preserve">
-    <value>You didn't enter map's path. It'll be saved to default directory {0}</value>
+    <value>You didn't enter map's file name. It'll be saved to default directory with the name {0}</value>
   </data>
   <data name="MainForm_Progress" xml:space="preserve">
     <value>progress...</value>
