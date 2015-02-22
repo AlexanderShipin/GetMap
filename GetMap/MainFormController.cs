@@ -11,7 +11,7 @@ namespace GetMap
 {
 	public class MainFormController
 	{
-		private string FileFormatString = "{0}s={1}z={4}x={2}y={3}.png";
+		private string FullFileNameFormatString = "{0}s={1}z={4}x={2}y={3}.png";
 		private string tilesDirectory = "C:\\GetMapTmp\\";
 		private static int tileSize = 256;
 		private long imageQuality = 80;
@@ -50,21 +50,14 @@ namespace GetMap
 
 			CheckMapSize(mapWidth, mapHeight);
 
-			//todo: dialog whether the user wants too many big maps here
+			//todo: dialog whether a user wants too many big maps here
 			int splitedByWidthMapsQuantity = (int) Math.Ceiling((decimal) (mapWidth) / maxMapWidthHeight);
 			int splitedByHeightMapsQuantity = (int)Math.Ceiling((decimal)(mapHeight) / maxMapWidthHeight);
 
 			string fileName = "no_file_name";
 			if (splitedByWidthMapsQuantity > 1 || splitedByHeightMapsQuantity > 1)
 			{
-				//to avoid situation when map is saved to existing file but actually will be saved in several files (with old name and suffixes)
-				if (File.Exists(model.Path))
-					File.Delete(model.Path);
-
-				fileName = Path.GetFileNameWithoutExtension(model.Path);
-				Directory.CreateDirectory(Path.GetDirectoryName(model.Path) + "\\" + fileName);
-
-				model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "\\" + Path.GetFileName(model.Path);
+				CreateFolderForSplittedMap(model, ref fileName);
 			}
 
 			for (int i = 0; i < splitedByHeightMapsQuantity; i++)
@@ -89,6 +82,18 @@ namespace GetMap
 					LoadTilesAndSaveMap(model, currentMapWidth, currentMapHeight, currentLeftTopX, currentLeftTopY, currentRightButtomX, currentRightButtomY, internationalDateLineTileNumber);
 				}
 			}
+		}
+
+		private static void CreateFolderForSplittedMap(MainFormModel model, ref string fileName)
+		{
+			//to avoid situation when map is saved to existing file but actually will be saved in several files (with old name and suffixes)
+			if (File.Exists(model.Path))
+				File.Delete(model.Path);
+
+			fileName = Path.GetFileNameWithoutExtension(model.Path);
+			Directory.CreateDirectory(Path.GetDirectoryName(model.Path) + "\\" + fileName);
+
+			model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "\\" + Path.GetFileName(model.Path);
 		}
 
 		private void LoadTilesAndSaveMap(MainFormModel model, int mapWidth, int mapHeight, int leftTopX, int leftTopY, int rightBottomX, int rightBottomY, int internationalDateLineTileNumber)
@@ -118,8 +123,8 @@ namespace GetMap
 			var strategyCreator = new StrategyCreator();
 			var strategy = strategyCreator.CreateStrategy(model.MapSourceName);
 
-			var leftTopX = strategy.X(39.833734F, model.Zoom);
-			var leftTopY = strategy.Y(57.632846F, model.Zoom);
+			var tileX = strategy.X(39.833734F, model.Zoom);
+			var tileY = strategy.Y(57.632846F, model.Zoom);
 
 			if (!Directory.Exists(tilesDirectory))
 				Directory.CreateDirectory(tilesDirectory);
@@ -132,7 +137,7 @@ namespace GetMap
 				graphics.SmoothingMode = SmoothingMode.HighQuality;
 				graphics.DrawImage(map, 0, 0, tileSize, tileSize);
 
-				LoadAndAttachTileToMap(graphics, model, leftTopX, leftTopY, leftTopX, leftTopY, -1);
+				LoadAndAttachTileToMap(graphics, model, 0, 0, tileX, tileY);
 			}
 			return map;
 		}
@@ -153,102 +158,91 @@ namespace GetMap
 		{
 			if(mapHeight <= 0 || mapWidth <= 0)
 				throw new Exception(Resources.MainForm_Exception_InvalidMapSize);
-			//todo: bitmap limit size
 		}
 
 		private void AttachTilesToMap(Graphics graphics, MainFormModel model, int leftTopX, int leftTopY, int rightBottomX, int rightBottomY, int idlTileNumber)
 		{
 			if (model.LeftTopLon < model.RightBottomLon)
 			{
-				for(int i = leftTopX; i <= rightBottomX; i++)
-				{
-					if (CheckCancellation())
-						break;
-					for(int j = leftTopY; j <= rightBottomY; j++)
-					{
-						if (CheckCancellation())
-							break;
-						LoadAndAttachTileToMap(graphics, model, leftTopX, leftTopY, i, j, -1);
-					}
-				}
+				AttachTilesIterations(graphics, model, leftTopX, leftTopX, rightBottomX, leftTopY, rightBottomY, -1);
 			}
 			else
 			{
-				for (int i = leftTopX; i < idlTileNumber + 1; i++)
-				{
-					if (CheckCancellation())
-						break;
-					for (int j = leftTopY; j <= rightBottomY; j++)
-					{
-						if (CheckCancellation())
-							break;
-						LoadAndAttachTileToMap(graphics, model, leftTopX, leftTopY, i, j, -1);
-					}
-				}
+				AttachTilesIterations(graphics, model, leftTopX, leftTopX, idlTileNumber, leftTopY, rightBottomY, -1);
+				AttachTilesIterations(graphics, model, leftTopX, 0, rightBottomX, leftTopY, rightBottomY, idlTileNumber);
+			}
+		}
 
-				for (int i = 0; i <= rightBottomX; i++)
+		private void AttachTilesIterations(Graphics graphics, MainFormModel model, int tileXIndexToContinue, int tileStartXIndex, int tileEndXIndex, int tileStartYIndex, int tileEndYIndex, int idlTileNumber)
+		{
+			for (int i = tileStartXIndex; i < tileEndXIndex + 1; i++)
+			{
+				if (CheckCancellation())
+					break;
+				for (int j = tileStartYIndex; j <= tileEndYIndex; j++)
 				{
 					if (CheckCancellation())
 						break;
-					for (int j = leftTopY; j <= rightBottomY; j++)
-					{
-						if (CheckCancellation())
-							break;
-						LoadAndAttachTileToMap(graphics, model, leftTopX, leftTopY, i, j, idlTileNumber);
-					}
+					LoadAndAttachTileToMap(graphics, model, (idlTileNumber + 1 + i - tileXIndexToContinue) * tileSize, (j - tileStartYIndex) * tileSize, i, j);
 				}
 			}
 		}
 
-		private void LoadAndAttachTileToMap(Graphics graphics, MainFormModel model, int leftTopX, int leftTopY, int i, int j, int idlTileNumber)
+		private void LoadAndAttachTileToMap(Graphics graphics, MainFormModel model, int imageLeftTopX, int imageLeftTopY, int tileX, int tileY)
 		{
-			if (!File.Exists(String.Format(FileFormatString, tilesDirectory, model.MapSourceName, i, j, model.Zoom)))
-				using (var tile = new Bitmap(tileSize, tileSize))
-				{
-					using (Graphics tileGraphics = Graphics.FromImage(tile))
-					{
-						tileGraphics.CompositingQuality = CompositingQuality.HighSpeed;
-						tileGraphics.InterpolationMode = InterpolationMode.Low;
-						tileGraphics.SmoothingMode = SmoothingMode.HighSpeed;
-						tileGraphics.DrawImage(tile, 0, 0, tileSize, tileSize);
-
-						try
-						{
-							foreach (string sourceFormat in model.MapSourceFormat)
-							{
-								if (!string.IsNullOrEmpty(sourceFormat))
-									tileGraphics.DrawImage(LoadTile(sourceFormat, i, j, model.Zoom), 0, 0, tileSize, tileSize);
-							}
-						}
-						catch (WebException)
-						{
-							//tile doesn't exist
-						}
-					}
-
-					var eps = new EncoderParameters(1);
-					eps.Param[0] = new EncoderParameter(Encoder.Quality, imageQuality);
-
-					var pngCodec = getEncoderInfo("image/png");
-					tile.Save(String.Format(FileFormatString, tilesDirectory, model.MapSourceName, i, j, model.Zoom), pngCodec, eps);
-				}
+			var fullFilename = String.Format(FullFileNameFormatString, tilesDirectory, model.MapSourceName, tileX, tileY, model.Zoom);
+			if (!File.Exists(fullFilename))
+				SaveTile(model, tileX, tileY);
 
 			Bitmap tileFile = null;
 			try
 			{
 				try
 				{
-					tileFile = new Bitmap(String.Format(FileFormatString, tilesDirectory, model.MapSourceName, i, j, model.Zoom), true);
+					tileFile = new Bitmap(fullFilename, true);
 				}
 				catch
 				{
 					tileFile = new Bitmap(tileSize, tileSize);
 				}
-				graphics.DrawImage(tileFile, (idlTileNumber + 1 + i - leftTopX) * tileSize, (j - leftTopY) * tileSize, tileSize, tileSize);
+				graphics.DrawImage(tileFile, imageLeftTopX, imageLeftTopY, tileSize, tileSize);
 			}
 			finally
 			{
 				tileFile.Dispose();
+			}
+		}
+
+		private void SaveTile(MainFormModel model, int i, int j)
+		{
+			using (var tile = new Bitmap(tileSize, tileSize))
+			{
+				using (Graphics tileGraphics = Graphics.FromImage(tile))
+				{
+					tileGraphics.CompositingQuality = CompositingQuality.HighSpeed;
+					tileGraphics.InterpolationMode = InterpolationMode.Low;
+					tileGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+					tileGraphics.DrawImage(tile, 0, 0, tileSize, tileSize);
+
+					try
+					{
+						foreach (string sourceFormat in model.MapSourceFormat)
+						{
+							if (!string.IsNullOrEmpty(sourceFormat))
+								tileGraphics.DrawImage(LoadTile(sourceFormat, i, j, model.Zoom), 0, 0, tileSize, tileSize);
+						}
+					}
+					catch (WebException)
+					{
+						//tile doesn't exist
+					}
+				}
+
+				var eps = new EncoderParameters(1);
+				eps.Param[0] = new EncoderParameter(Encoder.Quality, imageQuality);
+
+				var pngCodec = getEncoderInfo("image/png");
+				tile.Save(String.Format(FullFileNameFormatString, tilesDirectory, model.MapSourceName, i, j, model.Zoom), pngCodec, eps);
 			}
 		}
 
@@ -259,7 +253,7 @@ namespace GetMap
 			authRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.1.3)";//for Google
 			var authResponse = (HttpWebResponse)authRequest.GetResponse();
 			var tile = Image.FromStream(authResponse.GetResponseStream());
-//			tile.Save(String.Format(FileFormatString, path, mapSourceName, x, y, zoom));
+//			tile.Save(String.Format(FullFileNameFormatString, path, mapSourceName, x, y, zoom));
 			authResponse.Close();
 			return tile;
 		}
