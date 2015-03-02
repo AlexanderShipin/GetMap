@@ -8,8 +8,8 @@ namespace GetMap
 
 		public StrategyCreator()
 		{
-			var googleCoordinateStrategy = new GoogleCoordinate();
-			var yandexCoordinateStrategy = new YandexCoordinate();
+			var googleCoordinateStrategy = new GoogleCoordinates();
+			var yandexCoordinateStrategy = new YandexCoordinates();
 
 			_strategies.Add("GoogleMap", googleCoordinateStrategy);
 			_strategies.Add("GoogleSatellite", googleCoordinateStrategy);

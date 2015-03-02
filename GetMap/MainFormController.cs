@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Net;
+using GetMap.Sources;
 
 namespace GetMap
 {
@@ -26,10 +27,8 @@ namespace GetMap
 			var strategyCreator = new StrategyCreator();
 			var strategy = strategyCreator.CreateStrategy(model.MapSourceName);
 
-			var leftTopX = strategy.X(model.LeftTopLon, model.Zoom);
-			var leftTopY = strategy.Y(model.LeftTopLat, model.Zoom);
-			var rightBottomX = strategy.X(model.RightBottomLon, model.Zoom);
-			var rightBottomY = strategy.Y(model.RightBottomLat, model.Zoom);
+			var leftTopTile = strategy.Tile(model.LeftTopLon, model.LeftTopLat, model.Zoom);
+			var rightBottomTile = strategy.Tile(model.RightBottomLon, model.RightBottomLat, model.Zoom);
 
 			if (!Directory.Exists(tilesDirectory))
 				Directory.CreateDirectory(tilesDirectory);
@@ -39,13 +38,13 @@ namespace GetMap
 			int internationalDateLineTileX = strategy.X(180, model.Zoom) - 1;
 			if (model.RightBottomLon > model.LeftTopLon)
 			{
-				mapWidth = tileSize * (rightBottomX - leftTopX + 1);
-				mapHeight = tileSize * (rightBottomY - leftTopY + 1);
+				mapWidth = tileSize * (rightBottomTile.X - leftTopTile.X + 1);
+				mapHeight = tileSize * (rightBottomTile.Y - leftTopTile.Y + 1);
 			}
 			else
 			{
-				mapWidth = tileSize * ((internationalDateLineTileX - leftTopX + 1) + (rightBottomX + 1));
-				mapHeight = tileSize * (rightBottomY - leftTopY + 1);
+				mapWidth = tileSize * ((internationalDateLineTileX - leftTopTile.X + 1) + (rightBottomTile.X + 1));
+				mapHeight = tileSize * (rightBottomTile.Y - leftTopTile.X + 1);
 			}
 
 			CheckMapSize(mapWidth, mapHeight);
@@ -66,20 +65,21 @@ namespace GetMap
 				{
 					int currentMapWidth = j == splitedByWidthMapsQuantity - 1 ? mapWidth - maxMapWidthHeight * j : maxMapWidthHeight;
 					int currentMapHeight = i == splitedByHeightMapsQuantity - 1 ? mapHeight - maxMapWidthHeight * i : maxMapWidthHeight;
-					int currentLeftTopX = leftTopX + j * maxMapWidthHeight / tileSize;
-					int currentLeftTopY = leftTopY + i * maxMapWidthHeight / tileSize;
-					int currentRightButtomX = j == splitedByWidthMapsQuantity - 1 ? rightBottomX : currentLeftTopX - 1 + (j + 1) * maxMapWidthHeight / tileSize;
-					int currentRightButtomY = i == splitedByHeightMapsQuantity - 1 ? rightBottomY : currentLeftTopY - 1 + (i + 1) * maxMapWidthHeight / tileSize;
 
-					if (currentLeftTopX > internationalDateLineTileX)
-						currentLeftTopX = currentLeftTopX - internationalDateLineTileX - 1;
-					if (currentRightButtomX > internationalDateLineTileX)
-						currentRightButtomX = currentRightButtomX - internationalDateLineTileX - 1;
+					var currentLeftTopTile = new Tile(leftTopTile.X + j * maxMapWidthHeight / tileSize, leftTopTile.Y + i * maxMapWidthHeight / tileSize);
+					int currentRightBottomX = j == splitedByWidthMapsQuantity - 1 ? rightBottomTile.X : currentLeftTopTile.X - 1 + (j + 1) * maxMapWidthHeight / tileSize;
+					int currentRightBottomY = i == splitedByHeightMapsQuantity - 1 ? rightBottomTile.Y : currentLeftTopTile.Y - 1 + (i + 1) * maxMapWidthHeight / tileSize;
+					var currentRightBottomTile = new Tile(currentRightBottomX, currentRightBottomY);
+
+					if (currentLeftTopTile.X > internationalDateLineTileX)
+						currentLeftTopTile.X = currentLeftTopTile.X - internationalDateLineTileX - 1;
+					if (currentRightBottomX > internationalDateLineTileX)
+						currentRightBottomTile.X = currentRightBottomX - internationalDateLineTileX - 1;
 
 					if (splitedByWidthMapsQuantity > 1 || splitedByHeightMapsQuantity > 1)
 						model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "-" + (i + 1) + "-" + (j + 1) + ".png";
-					
-					LoadTilesAndSaveMap(model, currentMapWidth, currentMapHeight, currentLeftTopX, currentLeftTopY, currentRightButtomX, currentRightButtomY, internationalDateLineTileX);
+
+					LoadTilesAndSaveMap(model, currentMapWidth, currentMapHeight, currentLeftTopTile, currentRightBottomTile, internationalDateLineTileX);
 				}
 			}
 		}
@@ -96,7 +96,7 @@ namespace GetMap
 			model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "\\" + Path.GetFileName(model.Path);
 		}
 
-		private void LoadTilesAndSaveMap(MainFormModel model, int mapWidth, int mapHeight, int leftTopX, int leftTopY, int rightBottomX, int rightBottomY, int internationalDateLineTileX)
+		private void LoadTilesAndSaveMap(MainFormModel model, int mapWidth, int mapHeight, Tile leftTopTile, Tile rightBottomTile, int internationalDateLineTileX)
 		{
 			using (var map = new Bitmap(mapWidth, mapHeight))
 			{
@@ -107,7 +107,7 @@ namespace GetMap
 					graphics.SmoothingMode = SmoothingMode.HighSpeed;
 					graphics.DrawImage(map, 0, 0, mapWidth, mapHeight);
 
-					AttachTilesToMap(graphics, model, leftTopX, leftTopY, rightBottomX, rightBottomY, internationalDateLineTileX);
+					AttachTilesToMap(graphics, model, leftTopTile, rightBottomTile, internationalDateLineTileX);
 				}
 
 				var eps = new EncoderParameters(1);
@@ -122,9 +122,7 @@ namespace GetMap
 		{
 			var strategyCreator = new StrategyCreator();
 			var strategy = strategyCreator.CreateStrategy(model.MapSourceName);
-
-			var tileX = strategy.X(39.833734F, model.Zoom);
-			var tileY = strategy.Y(57.632846F, model.Zoom);
+			var tile = strategy.Tile(39.833734F, 57.632846F, model.Zoom);
 
 			if (!Directory.Exists(tilesDirectory))
 				Directory.CreateDirectory(tilesDirectory);
@@ -137,7 +135,7 @@ namespace GetMap
 				graphics.SmoothingMode = SmoothingMode.HighQuality;
 				graphics.DrawImage(map, 0, 0, tileSize, tileSize);
 
-				LoadAndAttachTileToMap(graphics, model, 0, 0, tileX, tileY);
+				LoadAndAttachTileToMap(graphics, model, 0, 0, tile);
 			}
 			return map;
 		}
@@ -160,39 +158,39 @@ namespace GetMap
 				throw new Exception(Resources.MainForm_Exception_InvalidMapSize);
 		}
 
-		private void AttachTilesToMap(Graphics graphics, MainFormModel model, int tileLeftTopX, int tileLeftTopY, int tileRightBottomX, int tileRightBottomY, int internationalDateLineTileX)
+		private void AttachTilesToMap(Graphics graphics, MainFormModel model, Tile leftTopTile, Tile rightBottomTile, int internationalDateLineTileX)
 		{
 			if (model.LeftTopLon < model.RightBottomLon)
 			{
-				AttachTilesIterations(graphics, model, tileLeftTopX, tileLeftTopX, tileRightBottomX, tileLeftTopY, tileRightBottomY, -1);
+				AttachTilesIterations(graphics, model, leftTopTile.X, leftTopTile, rightBottomTile, -1);
 			}
 			else
 			{
-				AttachTilesIterations(graphics, model, tileLeftTopX, tileLeftTopX, internationalDateLineTileX, tileLeftTopY, tileRightBottomY, -1);
-				AttachTilesIterations(graphics, model, tileLeftTopX, 0, tileRightBottomX, tileLeftTopY, tileRightBottomY, internationalDateLineTileX);
+				AttachTilesIterations(graphics, model, leftTopTile.X, leftTopTile, new Tile(internationalDateLineTileX, rightBottomTile.Y), -1);
+				AttachTilesIterations(graphics, model, leftTopTile.X, new Tile(0, leftTopTile.Y), rightBottomTile, internationalDateLineTileX);
 			}
 		}
 
-		private void AttachTilesIterations(Graphics graphics, MainFormModel model, int tileXToContinueFrom, int tileStartX, int tileEndX, int tileStartY, int tileEndY, int internationalDateLineTileX)
+		private void AttachTilesIterations(Graphics graphics, MainFormModel model, int tileXToContinueFrom, Tile leftTopTile, Tile rightBottomTile, int internationalDateLineTileX)
 		{
-			for (int i = tileStartX; i < tileEndX + 1; i++)
+			for (int i = leftTopTile.X; i <= rightBottomTile.X; i++)
 			{
 				if (CheckCancellation())
 					break;
-				for (int j = tileStartY; j <= tileEndY; j++)
+				for (int j = leftTopTile.Y; j <= rightBottomTile.Y; j++)
 				{
 					if (CheckCancellation())
 						break;
-					LoadAndAttachTileToMap(graphics, model, (internationalDateLineTileX + 1 + i - tileXToContinueFrom) * tileSize, (j - tileStartY) * tileSize, i, j);
+					LoadAndAttachTileToMap(graphics, model, (internationalDateLineTileX + 1 + i - tileXToContinueFrom) * tileSize, (j - leftTopTile.Y) * tileSize, new Tile(i, j));
 				}
 			}
 		}
 
-		private void LoadAndAttachTileToMap(Graphics graphics, MainFormModel model, int imageLeftTopX, int imageLeftTopY, int tileX, int tileY)
+		private void LoadAndAttachTileToMap(Graphics graphics, MainFormModel model, int imageLeftTopX, int imageLeftTopY, Tile tile)
 		{
-			var fullFilename = String.Format(FullFileNameFormatString, tilesDirectory, model.MapSourceName, tileX, tileY, model.Zoom);
+			var fullFilename = String.Format(FullFileNameFormatString, tilesDirectory, model.MapSourceName, tile.X, tile.Y, model.Zoom);
 			if (!File.Exists(fullFilename))
-				SaveTile(model, tileX, tileY);
+				SaveTile(model, tile);
 
 			Bitmap tileFile = null;
 			try
@@ -213,23 +211,23 @@ namespace GetMap
 			}
 		}
 
-		private void SaveTile(MainFormModel model, int tileX, int tileY)
+		private void SaveTile(MainFormModel model, Tile tile)
 		{
-			using (var tile = new Bitmap(tileSize, tileSize))
+			using (var tileImage = new Bitmap(tileSize, tileSize))
 			{
-				using (Graphics tileGraphics = Graphics.FromImage(tile))
+				using (Graphics tileGraphics = Graphics.FromImage(tileImage))
 				{
 					tileGraphics.CompositingQuality = CompositingQuality.HighSpeed;
 					tileGraphics.InterpolationMode = InterpolationMode.Low;
 					tileGraphics.SmoothingMode = SmoothingMode.HighSpeed;
-					tileGraphics.DrawImage(tile, 0, 0, tileSize, tileSize);
+					tileGraphics.DrawImage(tileImage, 0, 0, tileSize, tileSize);
 
 					try
 					{
 						foreach (string sourceFormat in model.MapSourceFormat)
 						{
 							if (!string.IsNullOrEmpty(sourceFormat))
-								tileGraphics.DrawImage(LoadTile(sourceFormat, tileX, tileY, model.Zoom), 0, 0, tileSize, tileSize);
+								tileGraphics.DrawImage(LoadTile(sourceFormat, tile, model.Zoom), 0, 0, tileSize, tileSize);
 						}
 					}
 					catch (WebException)
@@ -242,20 +240,19 @@ namespace GetMap
 				eps.Param[0] = new EncoderParameter(Encoder.Quality, imageQuality);
 
 				var pngCodec = getEncoderInfo("image/png");
-				tile.Save(String.Format(FullFileNameFormatString, tilesDirectory, model.MapSourceName, tileX, tileY, model.Zoom), pngCodec, eps);
+				tileImage.Save(String.Format(FullFileNameFormatString, tilesDirectory, model.MapSourceName, tile.X, tile.Y, model.Zoom), pngCodec, eps);
 			}
 		}
 
-		private Image LoadTile(string mapSourceFormat, int tileX, int tileY, int zoom)
+		private Image LoadTile(string mapSourceFormat, Tile tile, int zoom)
 		{
-			var authRequest = (HttpWebRequest)WebRequest.Create(string.Format(mapSourceFormat, tileX, tileY, zoom));
+			var authRequest = (HttpWebRequest)WebRequest.Create(string.Format(mapSourceFormat, tile.X, tile.Y, zoom));
 			authRequest.Method = "GET";
 			authRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.1.3)";//for Google
 			var authResponse = (HttpWebResponse)authRequest.GetResponse();
-			var tile = Image.FromStream(authResponse.GetResponseStream());
-//			tile.Save(String.Format(FullFileNameFormatString, path, mapSourceName, tileX, tileY, zoom));
+			var tileStream = Image.FromStream(authResponse.GetResponseStream());
 			authResponse.Close();
-			return tile;
+			return tileStream;
 		}
 	}
 }

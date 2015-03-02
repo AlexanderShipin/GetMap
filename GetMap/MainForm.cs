@@ -70,11 +70,8 @@ namespace GetMap
 		private bool IsValidTwoCoordinatesText(string text, out float lat, out float lng)
 		{
 			lng = 0;
-			return
-				float.TryParse(regExTwoCoordinates.Match(text).Groups[1].Value, NumberStyles.Number, CultureInfo.InvariantCulture,
-				               out lat) &&
-				float.TryParse(regExTwoCoordinates.Match(text).Groups[3].Value, NumberStyles.Number, CultureInfo.InvariantCulture,
-				               out lng);
+			return float.TryParse(regExTwoCoordinates.Match(text).Groups[1].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out lat) &&
+				   float.TryParse(regExTwoCoordinates.Match(text).Groups[3].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out lng);
 		}
 
 		private bool IsValidFourCoordinatesText(string text, out float leftTopLat, out float leftTopLng, out float rightBottomLat, out float rightBottomLng)
@@ -82,15 +79,10 @@ namespace GetMap
 			leftTopLng = 0;
 			rightBottomLat = 0;
 			rightBottomLng = 0;
-			return
-				float.TryParse(regExFourCoordinates.Match(text).Groups[1].Value, NumberStyles.Number, CultureInfo.InvariantCulture,
-				               out leftTopLat) &&
-				float.TryParse(regExFourCoordinates.Match(text).Groups[3].Value, NumberStyles.Number, CultureInfo.InvariantCulture,
-				               out leftTopLng) &&
-				float.TryParse(regExFourCoordinates.Match(text).Groups[5].Value, NumberStyles.Number, CultureInfo.InvariantCulture,
-				               out rightBottomLat) &&
-				float.TryParse(regExFourCoordinates.Match(text).Groups[7].Value, NumberStyles.Number, CultureInfo.InvariantCulture,
-				               out rightBottomLng);
+			return float.TryParse(regExFourCoordinates.Match(text).Groups[1].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out leftTopLat) &&
+				   float.TryParse(regExFourCoordinates.Match(text).Groups[3].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out leftTopLng) &&
+				   float.TryParse(regExFourCoordinates.Match(text).Groups[5].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out rightBottomLat) &&
+				   float.TryParse(regExFourCoordinates.Match(text).Groups[7].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out rightBottomLng);
 		}
 
 		private bool IsHybridLayer(string layerName)
@@ -179,8 +171,7 @@ namespace GetMap
 
 			// only allow one decimal point (not at the beginning)
 			var textBox = sender as TextBox;
-			if (e.KeyChar == decimalSeparator && textBox != null &&
-			    (textBox.Text.IndexOf(decimalSeparator) > -1 || textBox.SelectionStart == 0))
+			if (e.KeyChar == decimalSeparator && textBox != null && (textBox.Text.IndexOf(decimalSeparator) > -1 || textBox.SelectionStart == 0))
 			{
 				e.Handled = true;
 			}
@@ -203,9 +194,7 @@ namespace GetMap
 				if (!IsValidCoordinateText(Clipboard.GetText()))
 				{
 					e.SuppressKeyPress = true;
-					if (
-						!IsValidFourCoordinatesText(Clipboard.GetText(), out leftTopLat, out leftTopLng, out rightBottomLat,
-						                            out rightBottomLng))
+					if (!IsValidFourCoordinatesText(Clipboard.GetText(), out leftTopLat, out leftTopLng, out rightBottomLat, out rightBottomLng))
 					{
 						if (IsValidTwoCoordinatesText(Clipboard.GetText(), out leftTopLat, out leftTopLng))
 						{
