@@ -18,7 +18,7 @@ namespace GetMap
 			return (int)((Math.PI - Math.Log(Math.Tan(Math.PI / 4 + leftTopLatRad / 2) * Math.Pow(((1 - e * Math.Sin(leftTopLatRad)) / (1 + e * Math.Sin(leftTopLatRad))), e / 2))) / (2 * Math.PI / Math.Pow(2, zoom)));
 		}
 
-		public Tile Tile(float lon, float lat, int zoom)
+		public Tile Tile(float lat, float lon, int zoom)
 		{
 			return new Tile(X(lon, zoom), Y(lat, zoom));
 		}

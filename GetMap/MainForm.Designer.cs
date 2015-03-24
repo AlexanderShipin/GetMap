@@ -105,7 +105,7 @@
 			this.leftTopLonLabel.Name = "leftTopLonLabel";
 			this.leftTopLonLabel.Size = new System.Drawing.Size(96, 13);
 			this.leftTopLonLabel.TabIndex = 0;
-			this.leftTopLonLabel.Text = "Left top longetude:";
+			this.leftTopLonLabel.Text = "Left top longitude:";
 			// 
 			// leftTopLonTextBox
 			// 
@@ -125,7 +125,7 @@
 			this.rightBottomLonLabel.Name = "rightBottomLonLabel";
 			this.rightBottomLonLabel.Size = new System.Drawing.Size(120, 13);
 			this.rightBottomLonLabel.TabIndex = 0;
-			this.rightBottomLonLabel.Text = "Right bottom longetude:";
+			this.rightBottomLonLabel.Text = "Right bottom longitude:";
 			// 
 			// rightBottomLonTextBox
 			// 

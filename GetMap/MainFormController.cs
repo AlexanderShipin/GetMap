@@ -27,8 +27,8 @@ namespace GetMap
 			var strategyCreator = new StrategyCreator();
 			var strategy = strategyCreator.CreateStrategy(model.MapSourceName);
 
-			var leftTopTile = strategy.Tile(model.LeftTopLon, model.LeftTopLat, model.Zoom);
-			var rightBottomTile = strategy.Tile(model.RightBottomLon, model.RightBottomLat, model.Zoom);
+			var leftTopTile = strategy.Tile(model.LeftTopLat, model.LeftTopLon, model.Zoom);
+			var rightBottomTile = strategy.Tile(model.RightBottomLat, model.RightBottomLon, model.Zoom);
 
 			if (!Directory.Exists(tilesDirectory))
 				Directory.CreateDirectory(tilesDirectory);
@@ -122,7 +122,18 @@ namespace GetMap
 		{
 			var strategyCreator = new StrategyCreator();
 			var strategy = strategyCreator.CreateStrategy(model.MapSourceName);
-			var tile = strategy.Tile(39.833734F, 57.632846F, model.Zoom);
+			Tile tile;
+			if (model.LeftTopLon < model.RightBottomLon)
+			{
+				tile = strategy.Tile(model.LeftTopLat + (model.LeftTopLat - model.RightBottomLat) / 2, model.LeftTopLon + (model.RightBottomLon - model.LeftTopLon) / 2, model.Zoom);
+			}
+			else
+			{
+				var medianLon = model.LeftTopLon + ((180 - model.LeftTopLon) + Math.Abs(-180 - model.RightBottomLon)) / 2;
+				if (medianLon > 180)
+					medianLon = medianLon - 360;
+				tile = strategy.Tile((model.LeftTopLat - model.RightBottomLat) / 2, medianLon, model.Zoom);
+			}
 
 			if (!Directory.Exists(tilesDirectory))
 				Directory.CreateDirectory(tilesDirectory);
