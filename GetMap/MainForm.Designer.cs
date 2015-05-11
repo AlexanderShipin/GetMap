@@ -50,8 +50,12 @@
 			this.zoomExamplePictureBox = new System.Windows.Forms.PictureBox();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
+			this.statusStrip = new System.Windows.Forms.StatusStrip();
+			this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+			this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			((System.ComponentModel.ISupportInitialize)(this.zoomTrackBar)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.zoomExamplePictureBox)).BeginInit();
+			this.statusStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// buildMapButton
@@ -70,7 +74,7 @@
 			this.buildingStatusLabel.Location = new System.Drawing.Point(24, 175);
 			this.buildingStatusLabel.Name = "buildingStatusLabel";
 			this.buildingStatusLabel.Size = new System.Drawing.Size(0, 13);
-			this.buildingStatusLabel.TabIndex = 1;
+			this.buildingStatusLabel.TabIndex = 0;
 			// 
 			// saveMapDialog
 			// 
@@ -103,7 +107,7 @@
 			this.leftTopLonLabel.AutoSize = true;
 			this.leftTopLonLabel.Location = new System.Drawing.Point(12, 70);
 			this.leftTopLonLabel.Name = "leftTopLonLabel";
-			this.leftTopLonLabel.Size = new System.Drawing.Size(96, 13);
+			this.leftTopLonLabel.Size = new System.Drawing.Size(92, 13);
 			this.leftTopLonLabel.TabIndex = 0;
 			this.leftTopLonLabel.Text = "Left top longitude:";
 			// 
@@ -123,7 +127,7 @@
 			this.rightBottomLonLabel.AutoSize = true;
 			this.rightBottomLonLabel.Location = new System.Drawing.Point(191, 70);
 			this.rightBottomLonLabel.Name = "rightBottomLonLabel";
-			this.rightBottomLonLabel.Size = new System.Drawing.Size(120, 13);
+			this.rightBottomLonLabel.Size = new System.Drawing.Size(116, 13);
 			this.rightBottomLonLabel.TabIndex = 0;
 			this.rightBottomLonLabel.Text = "Right bottom longitude:";
 			// 
@@ -214,7 +218,7 @@
 			this.pathLabel.Location = new System.Drawing.Point(12, 97);
 			this.pathLabel.Name = "pathLabel";
 			this.pathLabel.Size = new System.Drawing.Size(32, 13);
-			this.pathLabel.TabIndex = 8;
+			this.pathLabel.TabIndex = 0;
 			this.pathLabel.Text = "Path:";
 			// 
 			// pathTextBox
@@ -225,7 +229,7 @@
 			this.pathTextBox.Size = new System.Drawing.Size(247, 20);
 			this.pathTextBox.TabIndex = 0;
 			this.pathTextBox.TabStop = false;
-			this.pathTextBox.Text = MainFormModel.DefaultMapPath;
+			this.pathTextBox.Text = "C:\\GetMapTmp\\";
 			// 
 			// pathButton
 			// 
@@ -251,7 +255,7 @@
 			this.cancelButton.Location = new System.Drawing.Point(232, 170);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(75, 23);
-			this.cancelButton.TabIndex = 10;
+			this.cancelButton.TabIndex = 9;
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
 			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
@@ -261,14 +265,38 @@
 			this.backgroundWorker.WorkerReportsProgress = true;
 			this.backgroundWorker.WorkerSupportsCancellation = true;
 			this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
+			this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
 			this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
+			// 
+			// statusStrip
+			// 
+			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+				this.toolStripProgressBar,
+				this.toolStripStatusLabel});
+			this.statusStrip.Location = new System.Drawing.Point(0, 470);
+			this.statusStrip.Name = "statusStrip";
+			this.statusStrip.Size = new System.Drawing.Size(400, 22);
+			this.statusStrip.SizingGrip = false;
+			this.statusStrip.TabIndex = 0;
+			this.statusStrip.Text = "statusStrip";
+			// 
+			// toolStripProgressBar
+			// 
+			this.toolStripProgressBar.Name = "toolStripProgressBar";
+			this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
+			// 
+			// toolStripStatusLabel
+			// 
+			this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+			this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
 			// 
 			// MainForm
 			// 
 			this.AcceptButton = this.buildMapButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(400, 469);
+			this.ClientSize = new System.Drawing.Size(400, 492);
+			this.Controls.Add(this.statusStrip);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.zoomExamplePictureBox);
 			this.Controls.Add(this.zoomTrackBar);
@@ -294,6 +322,8 @@
 			this.Text = "GetMap";
 			((System.ComponentModel.ISupportInitialize)(this.zoomTrackBar)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.zoomExamplePictureBox)).EndInit();
+			this.statusStrip.ResumeLayout(false);
+			this.statusStrip.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -323,6 +353,9 @@
 		private System.Windows.Forms.PictureBox zoomExamplePictureBox;
 		private System.Windows.Forms.Button cancelButton;
 		private System.ComponentModel.BackgroundWorker backgroundWorker;
+		private System.Windows.Forms.StatusStrip statusStrip;
+		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
 	}
 }
 

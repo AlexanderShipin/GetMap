@@ -17,9 +17,14 @@ namespace GetMap
 		private static int tileSize = 256;
 		private long imageQuality = 80;
 		private int maxMapWidthHeight = 7000 / tileSize * tileSize;
+		private int tilesAttached;
+		private int totalTilesQuantity;
 
 		public delegate bool CheckCancellationHandler();
 		public event CheckCancellationHandler CheckCancellation;
+
+		public delegate void ReportProgressHandler(int percent, object userState);
+		public event ReportProgressHandler ReportProgress;
 
 		//todo: refactor this method
 		public void GetMap(MainFormModel model, BackgroundWorker worker, DoWorkEventArgs e)
@@ -51,7 +56,7 @@ namespace GetMap
 
 			//todo: dialog whether a user wants too many big maps here
 			int splitedByWidthMapsQuantity = (int) Math.Ceiling((decimal) (mapWidth) / maxMapWidthHeight);
-			int splitedByHeightMapsQuantity = (int)Math.Ceiling((decimal)(mapHeight) / maxMapWidthHeight);
+			int splitedByHeightMapsQuantity = (int) Math.Ceiling((decimal) (mapHeight) / maxMapWidthHeight);
 
 			string fileName = "no_file_name";
 			if (splitedByWidthMapsQuantity > 1 || splitedByHeightMapsQuantity > 1)
@@ -59,6 +64,8 @@ namespace GetMap
 				CreateFolderForSplittedMap(model, ref fileName);
 			}
 
+			tilesAttached = 0;
+			totalTilesQuantity = (rightBottomTile.X - leftTopTile.X + 1) * (rightBottomTile.Y - leftTopTile.Y + 1);
 			for (int i = 0; i < splitedByHeightMapsQuantity; i++)
 			{
 				for (int j = 0; j < splitedByWidthMapsQuantity; j++)
@@ -73,8 +80,8 @@ namespace GetMap
 
 					if (currentLeftTopTile.X > internationalDateLineTileX)
 						currentLeftTopTile.X = currentLeftTopTile.X - internationalDateLineTileX - 1;
-					if (currentRightBottomX > internationalDateLineTileX)
-						currentRightBottomTile.X = currentRightBottomX - internationalDateLineTileX - 1;
+					if (currentRightBottomTile.X > internationalDateLineTileX)
+						currentRightBottomTile.X = currentRightBottomTile.X - internationalDateLineTileX - 1;
 
 					if (splitedByWidthMapsQuantity > 1 || splitedByHeightMapsQuantity > 1)
 						model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "-" + (i + 1) + "-" + (j + 1) + ".png";
@@ -193,6 +200,7 @@ namespace GetMap
 					if (CheckCancellation())
 						break;
 					LoadAndAttachTileToMap(graphics, model, (internationalDateLineTileX + 1 + i - tileXToContinueFrom) * tileSize, (j - leftTopTile.Y) * tileSize, new Tile(i, j));
+					ReportProgress(++tilesAttached * 100 / totalTilesQuantity, String.Empty);
 				}
 			}
 		}

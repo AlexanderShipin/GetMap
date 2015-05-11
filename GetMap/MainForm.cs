@@ -1,4 +1,5 @@
-﻿using GetMap.Properties;
+﻿using System.Drawing;
+using GetMap.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -244,6 +245,7 @@ namespace GetMap
 		{
 			buildMapButton.Enabled = true;
 			cancelButton.Enabled = false;
+			toolStripProgressBar.Value = 0;
 
 			if (e.Cancelled)
 			{
@@ -262,6 +264,7 @@ namespace GetMap
 		{
 			var worker = sender as BackgroundWorker;
 
+			controller.ReportProgress += backgroundWorker.ReportProgress;
 			controller.CheckCancellation += () =>
 			{
 				if (worker.CancellationPending)
@@ -285,6 +288,22 @@ namespace GetMap
 			timeStart.Stop();
 
 			e.Result = new { Error = errorMsg, Time = timeStart.Elapsed };
+		}
+
+		private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		{
+			toolStripProgressBar.Value = e.ProgressPercentage;
+
+			//Show percentage
+			statusStrip.Refresh();
+			using (Graphics gr = toolStripProgressBar.ProgressBar.CreateGraphics())
+			{
+				gr.DrawString(toolStripProgressBar.Value.ToString() + "%",
+					SystemFonts.DefaultFont,
+					Brushes.Black,
+					new PointF(toolStripProgressBar.Width / 2 - (gr.MeasureString(toolStripProgressBar.Value.ToString() + "%", SystemFonts.DefaultFont).Width / 2.0F),
+						toolStripProgressBar.Height / 2 - (gr.MeasureString(toolStripProgressBar.Value.ToString() + "%", SystemFonts.DefaultFont).Height / 2.0F)));
+			}
 		}
 
 		#endregion
