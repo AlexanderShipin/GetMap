@@ -28,6 +28,9 @@ namespace GetMap
 		private Regex regExFourCoordinates = new Regex(@"(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+;\s?(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+");
 		private MainFormController controller = new MainFormController();
 
+		private Stopwatch timeRecorder;
+		private string errorMsg;
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -253,11 +256,10 @@ namespace GetMap
 				return;
 			}
 
-			var result = (dynamic)e.Result;
-			if (string.IsNullOrEmpty(result.Error))
-				buildingStatusLabel.Text = Resources.MainForm_BuildingTime + ": " + result.Time;
+			if (string.IsNullOrEmpty(errorMsg))
+				buildingStatusLabel.Text = Resources.MainForm_BuildingTime + ": " + timeRecorder.Elapsed.ToString(@"mm\:ss\:ffff");
 			else
-				buildingStatusLabel.Text = Resources.MainForm_ErrorOccuredWithMessage + ": " + result.Error;
+				buildingStatusLabel.Text = Resources.MainForm_ErrorOccuredWithMessage + ": " + errorMsg;
 		}
 
 		private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -275,8 +277,8 @@ namespace GetMap
 				return false;
 			};
 
-			string errorMsg = string.Empty;
-			var timeStart = Stopwatch.StartNew();
+			errorMsg = string.Empty;
+			timeRecorder = Stopwatch.StartNew();
 			try
 			{
 				controller.GetMap(model, worker, e);
@@ -285,14 +287,13 @@ namespace GetMap
 			{
 				errorMsg = ex.Message;
 			}
-			timeStart.Stop();
-
-			e.Result = new { Error = errorMsg, Time = timeStart.Elapsed };
+			timeRecorder.Stop();
 		}
 
 		private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			toolStripProgressBar.Value = e.ProgressPercentage;
+			buildingStatusLabel.Text = Resources.MainForm_BuildingTime + ": " + timeRecorder.Elapsed.ToString(@"mm\:ss\:ffff");
 
 			//Show percentage
 			statusStrip.Refresh();
