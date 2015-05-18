@@ -138,7 +138,7 @@ namespace GetMap
 		{
 			buildMapButton.Enabled = false;
 			cancelButton.Enabled = true;
-			buildingStatusLabel.Text = String.Empty;
+			toolStripBuildingStatusLabel.Text = String.Empty;
 			try
 			{
 				model = new MainFormModel();
@@ -154,7 +154,7 @@ namespace GetMap
 			}
 			catch (Exception ex)
 			{
-				buildingStatusLabel.Text = Resources.MainForm_ErrorOccuredWithMessage + ": " + ex.Message;
+				toolStripBuildingStatusLabel.Text = Resources.MainForm_ErrorOccuredWithMessage + ": " + ex.Message;
 			}
 		}
 
@@ -252,14 +252,14 @@ namespace GetMap
 
 			if (e.Cancelled)
 			{
-				buildingStatusLabel.Text = Resources.MainForm_BuildCancelled;
+				toolStripBuildingStatusLabel.Text = Resources.MainForm_BuildCancelled;
 				return;
 			}
 
 			if (string.IsNullOrEmpty(errorMsg))
-				buildingStatusLabel.Text = Resources.MainForm_BuildingTime + ": " + timeRecorder.Elapsed.ToString(@"mm\:ss\:ffff");
+				toolStripBuildingStatusLabel.Text = Resources.MainForm_BuildingTime + ": " + timeRecorder.Elapsed.ToString(@"mm\:ss\:ff");
 			else
-				buildingStatusLabel.Text = Resources.MainForm_ErrorOccuredWithMessage + ": " + errorMsg;
+				toolStripBuildingStatusLabel.Text = Resources.MainForm_ErrorOccuredWithMessage + ": " + errorMsg;
 		}
 
 		private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -293,7 +293,7 @@ namespace GetMap
 		private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			toolStripProgressBar.Value = e.ProgressPercentage;
-			buildingStatusLabel.Text = Resources.MainForm_BuildingTime + ": " + timeRecorder.Elapsed.ToString(@"mm\:ss\:ffff");
+			toolStripBuildingStatusLabel.Text = Resources.MainForm_BuildingTime + ": " + timeRecorder.Elapsed.ToString(@"mm\:ss\:ff");
 
 			//Show percentage
 			statusStrip.Refresh();

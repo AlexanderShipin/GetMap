@@ -29,7 +29,6 @@
 		private void InitializeComponent()
 		{
 			this.buildMapButton = new System.Windows.Forms.Button();
-			this.buildingStatusLabel = new System.Windows.Forms.Label();
 			this.saveMapDialog = new System.Windows.Forms.SaveFileDialog();
 			this.leftTopLatTextBox = new System.Windows.Forms.TextBox();
 			this.leftTopLatLabel = new System.Windows.Forms.Label();
@@ -53,6 +52,7 @@
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
 			this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripBuildingStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			((System.ComponentModel.ISupportInitialize)(this.zoomTrackBar)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.zoomExamplePictureBox)).BeginInit();
 			this.statusStrip.SuspendLayout();
@@ -67,14 +67,6 @@
 			this.buildMapButton.Text = "Build map";
 			this.buildMapButton.UseVisualStyleBackColor = true;
 			this.buildMapButton.Click += new System.EventHandler(this.BuildMapButton_Click);
-			// 
-			// buildingStatusLabel
-			// 
-			this.buildingStatusLabel.AutoSize = true;
-			this.buildingStatusLabel.Location = new System.Drawing.Point(24, 175);
-			this.buildingStatusLabel.Name = "buildingStatusLabel";
-			this.buildingStatusLabel.Size = new System.Drawing.Size(0, 13);
-			this.buildingStatusLabel.TabIndex = 0;
 			// 
 			// saveMapDialog
 			// 
@@ -271,8 +263,9 @@
 			// statusStrip
 			// 
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-				this.toolStripProgressBar,
-				this.toolStripStatusLabel});
+			this.toolStripProgressBar,
+			this.toolStripStatusLabel,
+			this.toolStripBuildingStatusLabel});
 			this.statusStrip.Location = new System.Drawing.Point(0, 470);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(400, 22);
@@ -289,6 +282,11 @@
 			// 
 			this.toolStripStatusLabel.Name = "toolStripStatusLabel";
 			this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
+			// 
+			// toolStripBuildingStatusLabel
+			// 
+			this.toolStripBuildingStatusLabel.Name = "toolStripBuildingStatusLabel";
+			this.toolStripBuildingStatusLabel.Size = new System.Drawing.Size(0, 17);
 			// 
 			// MainForm
 			// 
@@ -315,7 +313,6 @@
 			this.Controls.Add(this.leftTopLonTextBox);
 			this.Controls.Add(this.leftTopLatLabel);
 			this.Controls.Add(this.leftTopLatTextBox);
-			this.Controls.Add(this.buildingStatusLabel);
 			this.Controls.Add(this.buildMapButton);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "MainForm";
@@ -332,7 +329,6 @@
 		#endregion
 
 		private System.Windows.Forms.Button buildMapButton;
-		private System.Windows.Forms.Label buildingStatusLabel;
 		private System.Windows.Forms.SaveFileDialog saveMapDialog;
 		private System.Windows.Forms.TextBox leftTopLatTextBox;
 		private System.Windows.Forms.Label leftTopLatLabel;
@@ -356,6 +352,7 @@
 		private System.Windows.Forms.StatusStrip statusStrip;
 		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripBuildingStatusLabel;
 	}
 }
 
