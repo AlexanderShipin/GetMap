@@ -244,6 +244,11 @@ namespace GetMap
 			GetZoomExampleMap();
 		}
 
+		private void coordinateTextBox_TextChanged(object sender, EventArgs e)
+		{
+			GetZoomExampleMap();
+		}
+
 		private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			buildMapButton.Enabled = true;

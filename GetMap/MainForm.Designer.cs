@@ -82,6 +82,7 @@
 			this.leftTopLatTextBox.TabIndex = 2;
 			this.leftTopLatTextBox.Text = "57.645670";
 			this.leftTopLatTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.leftTopLatTextBox.TextChanged += new System.EventHandler(this.coordinateTextBox_TextChanged);
 			this.leftTopLatTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyDown);
 			this.leftTopLatTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
 			// 
@@ -111,6 +112,7 @@
 			this.leftTopLonTextBox.TabIndex = 3;
 			this.leftTopLonTextBox.Text = "39.805716";
 			this.leftTopLonTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.leftTopLonTextBox.TextChanged += new System.EventHandler(this.coordinateTextBox_TextChanged);
 			this.leftTopLonTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyDown);
 			this.leftTopLonTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
 			// 
@@ -131,6 +133,7 @@
 			this.rightBottomLonTextBox.TabIndex = 5;
 			this.rightBottomLonTextBox.Text = "39.910257";
 			this.rightBottomLonTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.rightBottomLonTextBox.TextChanged += new System.EventHandler(this.coordinateTextBox_TextChanged);
 			this.rightBottomLonTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyDown);
 			this.rightBottomLonTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
 			// 
@@ -151,6 +154,7 @@
 			this.rightBottomLatTextBox.TabIndex = 4;
 			this.rightBottomLatTextBox.Text = "57.613543";
 			this.rightBottomLatTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.rightBottomLatTextBox.TextChanged += new System.EventHandler(this.coordinateTextBox_TextChanged);
 			this.rightBottomLatTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyDown);
 			this.rightBottomLatTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
 			// 
@@ -263,9 +267,9 @@
 			// statusStrip
 			// 
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripProgressBar,
-			this.toolStripStatusLabel,
-			this.toolStripBuildingStatusLabel});
+            this.toolStripProgressBar,
+            this.toolStripStatusLabel,
+            this.toolStripBuildingStatusLabel});
 			this.statusStrip.Location = new System.Drawing.Point(0, 470);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(400, 22);
