@@ -53,6 +53,7 @@
 			this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
 			this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripBuildingStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+			this.emptyCacheButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.zoomTrackBar)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.zoomExamplePictureBox)).BeginInit();
 			this.statusStrip.SuspendLayout();
@@ -292,12 +293,23 @@
 			this.toolStripBuildingStatusLabel.Name = "toolStripBuildingStatusLabel";
 			this.toolStripBuildingStatusLabel.Size = new System.Drawing.Size(0, 17);
 			// 
+			// emptyCacheButton
+			// 
+			this.emptyCacheButton.Location = new System.Drawing.Point(15, 170);
+			this.emptyCacheButton.Name = "emptyCacheButton";
+			this.emptyCacheButton.Size = new System.Drawing.Size(89, 23);
+			this.emptyCacheButton.TabIndex = 10;
+			this.emptyCacheButton.Text = "Empty cache";
+			this.emptyCacheButton.UseVisualStyleBackColor = true;
+			this.emptyCacheButton.Click += new System.EventHandler(this.emptyCacheButton_Click);
+			// 
 			// MainForm
 			// 
 			this.AcceptButton = this.buildMapButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(400, 492);
+			this.Controls.Add(this.emptyCacheButton);
 			this.Controls.Add(this.statusStrip);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.zoomExamplePictureBox);
@@ -357,6 +369,7 @@
 		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripBuildingStatusLabel;
+		private System.Windows.Forms.Button emptyCacheButton;
 	}
 }
 

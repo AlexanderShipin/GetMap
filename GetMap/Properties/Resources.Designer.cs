@@ -88,6 +88,24 @@ namespace GetMap.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty the cache.
+        /// </summary>
+        internal static string MainForm_EmptyCacheHeader {
+            get {
+                return ResourceManager.GetString("MainForm_EmptyCacheHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete all tiles from the cache?.
+        /// </summary>
+        internal static string MainForm_EmptyCacheMessage {
+            get {
+                return ResourceManager.GetString("MainForm_EmptyCacheMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error occured with the message.
         /// </summary>
         internal static string MainForm_ErrorOccuredWithMessage {

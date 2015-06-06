@@ -239,6 +239,12 @@ namespace GetMap
 			}
 		}
 
+		private void emptyCacheButton_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show(Resources.MainForm_EmptyCacheMessage, Resources.MainForm_EmptyCacheHeader, MessageBoxButtons.OKCancel) == DialogResult.OK) ;
+				controller.EmptyCache();
+		}
+
 		private void sourceComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			GetZoomExampleMap();

@@ -126,6 +126,12 @@
   <data name="MainForm_CoordinatesNotValid" xml:space="preserve">
     <value>Coordinates are not valid</value>
   </data>
+  <data name="MainForm_EmptyCacheHeader" xml:space="preserve">
+    <value>Empty the cache</value>
+  </data>
+  <data name="MainForm_EmptyCacheMessage" xml:space="preserve">
+    <value>Are you sure you want to delete all tiles from the cache?</value>
+  </data>
   <data name="MainForm_ErrorOccuredWithMessage" xml:space="preserve">
     <value>Error occured with the message</value>
   </data>

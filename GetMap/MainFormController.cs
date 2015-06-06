@@ -13,7 +13,7 @@ namespace GetMap
 	public class MainFormController
 	{
 		private string FullFileNameFormatString = "{0}s={1}z={4}tileX={2}tileY={3}.png";
-		private string tilesDirectory = "C:\\GetMapTmp\\";
+		private string tilesDirectory = "C:\\GetMapTmp\\cache\\";
 		private static int tileSize = 256;
 		private long imageQuality = 80;
 		private int maxMapWidthHeight = 7000 / tileSize * tileSize;
@@ -91,38 +91,9 @@ namespace GetMap
 			}
 		}
 
-		private static void CreateFolderForSplittedMap(MainFormModel model, ref string fileName)
+		public void EmptyCache()
 		{
-			//to avoid situation when map is saved to existing file but actually will be saved in several files (with old name and suffixes)
-			if (File.Exists(model.Path))
-				File.Delete(model.Path);
-
-			fileName = Path.GetFileNameWithoutExtension(model.Path);
-			Directory.CreateDirectory(Path.GetDirectoryName(model.Path) + "\\" + fileName);
-
-			model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "\\" + Path.GetFileName(model.Path);
-		}
-
-		private void LoadTilesAndSaveMap(MainFormModel model, int mapWidth, int mapHeight, Tile leftTopTile, Tile rightBottomTile, int internationalDateLineTileX)
-		{
-			using (var map = new Bitmap(mapWidth, mapHeight))
-			{
-				using (Graphics graphics = Graphics.FromImage(map))
-				{
-					graphics.CompositingQuality = CompositingQuality.HighSpeed;
-					graphics.InterpolationMode = InterpolationMode.Low;
-					graphics.SmoothingMode = SmoothingMode.HighSpeed;
-					graphics.DrawImage(map, 0, 0, mapWidth, mapHeight);
-
-					AttachTilesToMap(graphics, model, leftTopTile, rightBottomTile, internationalDateLineTileX);
-				}
-
-				var eps = new EncoderParameters(1);
-				eps.Param[0] = new EncoderParameter(Encoder.Quality, imageQuality);
-
-				var jpegCodec = getEncoderInfo("image/jpeg");
-				map.Save(model.Path, jpegCodec, eps);
-			}
+			Directory.Delete(tilesDirectory, true);
 		}
 
 		public Bitmap GetZoomExampleMap(MainFormModel model)
@@ -156,6 +127,40 @@ namespace GetMap
 				LoadAndAttachTileToMap(graphics, model, 0, 0, tile);
 			}
 			return map;
+		}
+
+		private static void CreateFolderForSplittedMap(MainFormModel model, ref string fileName)
+		{
+			//to avoid situation when map is saved to existing file but actually will be saved in several files (with old name and suffixes)
+			if (File.Exists(model.Path))
+				File.Delete(model.Path);
+
+			fileName = Path.GetFileNameWithoutExtension(model.Path);
+			Directory.CreateDirectory(Path.GetDirectoryName(model.Path) + "\\" + fileName);
+
+			model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "\\" + Path.GetFileName(model.Path);
+		}
+
+		private void LoadTilesAndSaveMap(MainFormModel model, int mapWidth, int mapHeight, Tile leftTopTile, Tile rightBottomTile, int internationalDateLineTileX)
+		{
+			using (var map = new Bitmap(mapWidth, mapHeight))
+			{
+				using (Graphics graphics = Graphics.FromImage(map))
+				{
+					graphics.CompositingQuality = CompositingQuality.HighSpeed;
+					graphics.InterpolationMode = InterpolationMode.Low;
+					graphics.SmoothingMode = SmoothingMode.HighSpeed;
+					graphics.DrawImage(map, 0, 0, mapWidth, mapHeight);
+
+					AttachTilesToMap(graphics, model, leftTopTile, rightBottomTile, internationalDateLineTileX);
+				}
+
+				var eps = new EncoderParameters(1);
+				eps.Param[0] = new EncoderParameter(Encoder.Quality, imageQuality);
+
+				var jpegCodec = getEncoderInfo("image/jpeg");
+				map.Save(model.Path, jpegCodec, eps);
+			}
 		}
 
 		private ImageCodecInfo getEncoderInfo(string mimeType)
