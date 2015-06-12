@@ -14,14 +14,14 @@ namespace GetMap
 	public partial class MainForm : Form
 	{
 		private MainFormModel model;
-		private Dictionary<string, KeyValuePair<string, string>> providers = new Dictionary<string, KeyValuePair<string, string>>//new Dictionary<string, string>
+		private Dictionary<string, KeyValuePair<string, string>> providers = new Dictionary<string, KeyValuePair<string, string>>
 			{
-				{"Google map", new KeyValuePair<string, string>("GoogleMap", "http://mts.google.com/vt/x={0}&y={1}&z={2}&hl=en")},
-				{"Google satellite", new KeyValuePair<string, string>("GoogleSatellite", "http://khms.google.com/kh/v=159&x={0}&y={1}&z={2}")},
-				{"Google hybrid", new KeyValuePair<string, string>("GoogleHybrid", "http://mts.google.com/vt/lyrs=h&x={0}&y={1}&z={2}&hl=en")},
-				{"Yandex map", new KeyValuePair<string, string>("YandexMap", "http://vec.maps.yandex.net/tiles?l=map&x={0}&y={1}&z={2}&lang=ru_RU")},
-				{"Yandex satellite", new KeyValuePair<string, string>("YandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&x={0}&y={1}&z={2}&lang=ru_RU")},
-				{"Yandex hybrid", new KeyValuePair<string, string>("YandexHybrid", "http://vec.maps.yandex.net/tiles?l=skl&x={0}&y={1}&z={2}&lang=ru_RU")},
+				{Resources.MainForm_Providers_GoogleMap, new KeyValuePair<string, string>("GoogleMap", "http://mts.google.com/vt/x={0}&y={1}&z={2}&hl=en")},
+				{Resources.MainForm_Providers_GoogleSatellite, new KeyValuePair<string, string>("GoogleSatellite", "http://khms.google.com/kh/v=159&x={0}&y={1}&z={2}")},
+				{Resources.MainForm_Providers_GoogleHybrid, new KeyValuePair<string, string>("GoogleHybrid", "http://mts.google.com/vt/lyrs=h&x={0}&y={1}&z={2}&hl=en")},
+				{Resources.MainForm_Providers_YandexMap, new KeyValuePair<string, string>("YandexMap", "http://vec.maps.yandex.net/tiles?l=map&x={0}&y={1}&z={2}&lang=ru_RU")},
+				{Resources.MainForm_Providers_YandexSatellite, new KeyValuePair<string, string>("YandexSatellite", "http://sat.maps.yandex.net/tiles?l=sat&x={0}&y={1}&z={2}&lang=ru_RU")},
+				{Resources.MainForm_Providers_YandexHybrid, new KeyValuePair<string, string>("YandexHybrid", "http://vec.maps.yandex.net/tiles?l=skl&x={0}&y={1}&z={2}&lang=ru_RU")},
 			};
 		private Regex regExCoordinate = new Regex(@"-?\d+(\.\d+)?");
 		private Regex regExTwoCoordinates = new Regex(@"(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+");

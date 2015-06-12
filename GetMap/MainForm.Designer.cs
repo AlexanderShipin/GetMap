@@ -1,4 +1,6 @@
-﻿namespace GetMap
+﻿using GetMap.Properties;
+
+namespace GetMap
 {
 	partial class MainForm
 	{
@@ -65,7 +67,7 @@
 			this.buildMapButton.Name = "buildMapButton";
 			this.buildMapButton.Size = new System.Drawing.Size(75, 23);
 			this.buildMapButton.TabIndex = 8;
-			this.buildMapButton.Text = "Build map";
+			this.buildMapButton.Text = Resources.MainForm_BuildStart;
 			this.buildMapButton.UseVisualStyleBackColor = true;
 			this.buildMapButton.Click += new System.EventHandler(this.BuildMapButton_Click);
 			// 
@@ -94,7 +96,7 @@
 			this.leftTopLatLabel.Name = "leftTopLatLabel";
 			this.leftTopLatLabel.Size = new System.Drawing.Size(83, 13);
 			this.leftTopLatLabel.TabIndex = 0;
-			this.leftTopLatLabel.Text = "Left top latitude:";
+			this.leftTopLatLabel.Text = Resources.MainForm_LeftTopLatitude + ":";
 			// 
 			// leftTopLonLabel
 			// 
@@ -103,7 +105,7 @@
 			this.leftTopLonLabel.Name = "leftTopLonLabel";
 			this.leftTopLonLabel.Size = new System.Drawing.Size(92, 13);
 			this.leftTopLonLabel.TabIndex = 0;
-			this.leftTopLonLabel.Text = "Left top longitude:";
+			this.leftTopLonLabel.Text = Resources.MainForm_LeftTopLongitude + ":";
 			// 
 			// leftTopLonTextBox
 			// 
@@ -124,7 +126,7 @@
 			this.rightBottomLonLabel.Name = "rightBottomLonLabel";
 			this.rightBottomLonLabel.Size = new System.Drawing.Size(116, 13);
 			this.rightBottomLonLabel.TabIndex = 0;
-			this.rightBottomLonLabel.Text = "Right bottom longitude:";
+			this.rightBottomLonLabel.Text = Resources.MainForm_RightBottomLongitude + ":";
 			// 
 			// rightBottomLonTextBox
 			// 
@@ -145,7 +147,7 @@
 			this.rightBottomLatLabel.Name = "rightBottomLatLabel";
 			this.rightBottomLatLabel.Size = new System.Drawing.Size(107, 13);
 			this.rightBottomLatLabel.TabIndex = 0;
-			this.rightBottomLatLabel.Text = "Right bottom latitude:";
+			this.rightBottomLatLabel.Text = Resources.MainForm_RightBottomLatitude + ":";
 			// 
 			// rightBottomLatTextBox
 			// 
@@ -166,7 +168,7 @@
 			this.zoomLabel.Name = "zoomLabel";
 			this.zoomLabel.Size = new System.Drawing.Size(37, 13);
 			this.zoomLabel.TabIndex = 0;
-			this.zoomLabel.Text = "Zoom:";
+			this.zoomLabel.Text = Resources.MainForm_Zoom + ":";
 			// 
 			// zoomTextBox
 			// 
@@ -197,7 +199,7 @@
 			this.sourceLabel.Name = "sourceLabel";
 			this.sourceLabel.Size = new System.Drawing.Size(44, 13);
 			this.sourceLabel.TabIndex = 0;
-			this.sourceLabel.Text = "Source:";
+			this.sourceLabel.Text = Resources.MainForm_Source + ":";
 			// 
 			// sourceComboBox
 			// 
@@ -216,7 +218,7 @@
 			this.pathLabel.Name = "pathLabel";
 			this.pathLabel.Size = new System.Drawing.Size(32, 13);
 			this.pathLabel.TabIndex = 0;
-			this.pathLabel.Text = "Path:";
+			this.pathLabel.Text = Resources.MainForm_Path + ":";
 			// 
 			// pathTextBox
 			// 
@@ -253,7 +255,7 @@
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(75, 23);
 			this.cancelButton.TabIndex = 9;
-			this.cancelButton.Text = "Cancel";
+			this.cancelButton.Text = Resources.MainForm_BuildCancel;
 			this.cancelButton.UseVisualStyleBackColor = true;
 			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
 			// 
@@ -268,9 +270,9 @@
 			// statusStrip
 			// 
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBar,
-            this.toolStripStatusLabel,
-            this.toolStripBuildingStatusLabel});
+			this.toolStripProgressBar,
+			this.toolStripStatusLabel,
+			this.toolStripBuildingStatusLabel});
 			this.statusStrip.Location = new System.Drawing.Point(0, 470);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(400, 22);
@@ -299,7 +301,7 @@
 			this.emptyCacheButton.Name = "emptyCacheButton";
 			this.emptyCacheButton.Size = new System.Drawing.Size(89, 23);
 			this.emptyCacheButton.TabIndex = 10;
-			this.emptyCacheButton.Text = "Empty cache";
+			this.emptyCacheButton.Text = Resources.MainForm_EmptyCacheButton;
 			this.emptyCacheButton.UseVisualStyleBackColor = true;
 			this.emptyCacheButton.Click += new System.EventHandler(this.emptyCacheButton_Click);
 			// 
@@ -332,7 +334,7 @@
 			this.Controls.Add(this.buildMapButton);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "MainForm";
-			this.Text = "GetMap";
+			this.Text = Resources.MainForm_FormTitle;
 			((System.ComponentModel.ISupportInitialize)(this.zoomTrackBar)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.zoomExamplePictureBox)).EndInit();
 			this.statusStrip.ResumeLayout(false);

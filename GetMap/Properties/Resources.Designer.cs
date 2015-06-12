@@ -61,6 +61,15 @@ namespace GetMap.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string MainForm_BuildCancel {
+            get {
+                return ResourceManager.GetString("MainForm_BuildCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancelled.
         /// </summary>
         internal static string MainForm_BuildCancelled {
@@ -79,11 +88,29 @@ namespace GetMap.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Build map.
+        /// </summary>
+        internal static string MainForm_BuildStart {
+            get {
+                return ResourceManager.GetString("MainForm_BuildStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Coordinates are not valid.
         /// </summary>
         internal static string MainForm_CoordinatesNotValid {
             get {
                 return ResourceManager.GetString("MainForm_CoordinatesNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty cache.
+        /// </summary>
+        internal static string MainForm_EmptyCacheButton {
+            get {
+                return ResourceManager.GetString("MainForm_EmptyCacheButton", resourceCulture);
             }
         }
         
@@ -124,6 +151,33 @@ namespace GetMap.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GetMap.
+        /// </summary>
+        internal static string MainForm_FormTitle {
+            get {
+                return ResourceManager.GetString("MainForm_FormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left top latitude.
+        /// </summary>
+        internal static string MainForm_LeftTopLatitude {
+            get {
+                return ResourceManager.GetString("MainForm_LeftTopLatitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left top longitude.
+        /// </summary>
+        internal static string MainForm_LeftTopLongitude {
+            get {
+                return ResourceManager.GetString("MainForm_LeftTopLongitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You didn&apos;t enter map&apos;s file name. It&apos;ll be saved to default directory with the name {0}.
         /// </summary>
         internal static string MainForm_MapPathNotEntered {
@@ -133,11 +187,92 @@ namespace GetMap.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to progress....
+        ///   Looks up a localized string similar to Path.
         /// </summary>
-        internal static string MainForm_Progress {
+        internal static string MainForm_Path {
             get {
-                return ResourceManager.GetString("MainForm_Progress", resourceCulture);
+                return ResourceManager.GetString("MainForm_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google hybrid.
+        /// </summary>
+        internal static string MainForm_Providers_GoogleHybrid {
+            get {
+                return ResourceManager.GetString("MainForm_Providers_GoogleHybrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google map.
+        /// </summary>
+        internal static string MainForm_Providers_GoogleMap {
+            get {
+                return ResourceManager.GetString("MainForm_Providers_GoogleMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google satellite.
+        /// </summary>
+        internal static string MainForm_Providers_GoogleSatellite {
+            get {
+                return ResourceManager.GetString("MainForm_Providers_GoogleSatellite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yandex hybrid.
+        /// </summary>
+        internal static string MainForm_Providers_YandexHybrid {
+            get {
+                return ResourceManager.GetString("MainForm_Providers_YandexHybrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yandex map.
+        /// </summary>
+        internal static string MainForm_Providers_YandexMap {
+            get {
+                return ResourceManager.GetString("MainForm_Providers_YandexMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yandex satellite.
+        /// </summary>
+        internal static string MainForm_Providers_YandexSatellite {
+            get {
+                return ResourceManager.GetString("MainForm_Providers_YandexSatellite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right bottom latitude.
+        /// </summary>
+        internal static string MainForm_RightBottomLatitude {
+            get {
+                return ResourceManager.GetString("MainForm_RightBottomLatitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right bottom longitude.
+        /// </summary>
+        internal static string MainForm_RightBottomLongitude {
+            get {
+                return ResourceManager.GetString("MainForm_RightBottomLongitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source.
+        /// </summary>
+        internal static string MainForm_Source {
+            get {
+                return ResourceManager.GetString("MainForm_Source", resourceCulture);
             }
         }
         
@@ -147,6 +282,15 @@ namespace GetMap.Properties {
         internal static string MainForm_Warning {
             get {
                 return ResourceManager.GetString("MainForm_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom.
+        /// </summary>
+        internal static string MainForm_Zoom {
+            get {
+                return ResourceManager.GetString("MainForm_Zoom", resourceCulture);
             }
         }
     }

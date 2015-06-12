@@ -117,14 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MainForm_BuildCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="MainForm_BuildCancelled" xml:space="preserve">
     <value>Cancelled</value>
   </data>
   <data name="MainForm_BuildingTime" xml:space="preserve">
     <value>Building time</value>
   </data>
+  <data name="MainForm_BuildStart" xml:space="preserve">
+    <value>Build map</value>
+  </data>
   <data name="MainForm_CoordinatesNotValid" xml:space="preserve">
     <value>Coordinates are not valid</value>
+  </data>
+  <data name="MainForm_EmptyCacheButton" xml:space="preserve">
+    <value>Empty cache</value>
   </data>
   <data name="MainForm_EmptyCacheHeader" xml:space="preserve">
     <value>Empty the cache</value>
@@ -138,13 +147,52 @@
   <data name="MainForm_Exception_InvalidMapSize" xml:space="preserve">
     <value>Invalid map size. Width and Height should be more than zero</value>
   </data>
+  <data name="MainForm_LeftTopLatitude" xml:space="preserve">
+    <value>Left top latitude</value>
+  </data>
+  <data name="MainForm_LeftTopLongitude" xml:space="preserve">
+    <value>Left top longitude</value>
+  </data>
   <data name="MainForm_MapPathNotEntered" xml:space="preserve">
     <value>You didn't enter map's file name. It'll be saved to default directory with the name {0}</value>
   </data>
-  <data name="MainForm_Progress" xml:space="preserve">
-    <value>progress...</value>
+  <data name="MainForm_Path" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="MainForm_Providers_GoogleHybrid" xml:space="preserve">
+    <value>Google hybrid</value>
+  </data>
+  <data name="MainForm_Providers_GoogleMap" xml:space="preserve">
+    <value>Google map</value>
+  </data>
+  <data name="MainForm_Providers_GoogleSatellite" xml:space="preserve">
+    <value>Google satellite</value>
+  </data>
+  <data name="MainForm_Providers_YandexHybrid" xml:space="preserve">
+    <value>Yandex hybrid</value>
+  </data>
+  <data name="MainForm_Providers_YandexMap" xml:space="preserve">
+    <value>Yandex map</value>
+  </data>
+  <data name="MainForm_Providers_YandexSatellite" xml:space="preserve">
+    <value>Yandex satellite</value>
+  </data>
+  <data name="MainForm_RightBottomLatitude" xml:space="preserve">
+    <value>Right bottom latitude</value>
+  </data>
+  <data name="MainForm_RightBottomLongitude" xml:space="preserve">
+    <value>Right bottom longitude</value>
+  </data>
+  <data name="MainForm_Source" xml:space="preserve">
+    <value>Source</value>
   </data>
   <data name="MainForm_Warning" xml:space="preserve">
     <value>Warning!</value>
+  </data>
+  <data name="MainForm_Zoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="MainForm_FormTitle" xml:space="preserve">
+    <value>GetMap</value>
   </data>
 </root>
