@@ -38,19 +38,21 @@ namespace GetMap
 			if (!Directory.Exists(tilesDirectory))
 				Directory.CreateDirectory(tilesDirectory);
 
-			int mapWidth;
-			int mapHeight;
+			int mapWidthInTiles;
+			int mapHeightInTiles;
 			int internationalDateLineTileX = strategy.X(180, model.Zoom) - 1;
 			if (model.RightBottomLon > model.LeftTopLon)
 			{
-				mapWidth = tileSize * (rightBottomTile.X - leftTopTile.X + 1);
-				mapHeight = tileSize * (rightBottomTile.Y - leftTopTile.Y + 1);
+				mapWidthInTiles = rightBottomTile.X - leftTopTile.X + 1;
+				mapHeightInTiles = rightBottomTile.Y - leftTopTile.Y + 1;
 			}
 			else
 			{
-				mapWidth = tileSize * ((internationalDateLineTileX - leftTopTile.X + 1) + (rightBottomTile.X + 1));
-				mapHeight = tileSize * (rightBottomTile.Y - leftTopTile.X + 1);
+				mapWidthInTiles = (internationalDateLineTileX - leftTopTile.X + 1) + (rightBottomTile.X + 1);
+				mapHeightInTiles = rightBottomTile.Y - leftTopTile.X + 1;
 			}
+			int mapWidth = tileSize * mapWidthInTiles;
+			int mapHeight = tileSize * mapHeightInTiles;
 
 			CheckMapSize(mapWidth, mapHeight);
 
@@ -65,7 +67,7 @@ namespace GetMap
 			}
 
 			tilesAttached = 0;
-			totalTilesQuantity = (rightBottomTile.X - leftTopTile.X + 1) * (rightBottomTile.Y - leftTopTile.Y + 1);
+			totalTilesQuantity = mapWidthInTiles * mapHeightInTiles;
 			for (int i = 0; i < splitedByHeightMapsQuantity; i++)
 			{
 				for (int j = 0; j < splitedByWidthMapsQuantity; j++)
@@ -74,8 +76,8 @@ namespace GetMap
 					int currentMapHeight = i == splitedByHeightMapsQuantity - 1 ? mapHeight - maxMapWidthHeight * i : maxMapWidthHeight;
 
 					var currentLeftTopTile = new Tile(leftTopTile.X + j * maxMapWidthHeight / tileSize, leftTopTile.Y + i * maxMapWidthHeight / tileSize);
-					int currentRightBottomX = j == splitedByWidthMapsQuantity - 1 ? rightBottomTile.X : currentLeftTopTile.X - 1 + (j + 1) * maxMapWidthHeight / tileSize;
-					int currentRightBottomY = i == splitedByHeightMapsQuantity - 1 ? rightBottomTile.Y : currentLeftTopTile.Y - 1 + (i + 1) * maxMapWidthHeight / tileSize;
+					int currentRightBottomX = j == splitedByWidthMapsQuantity - 1 ? rightBottomTile.X : currentLeftTopTile.X - 1 + maxMapWidthHeight / tileSize;
+					int currentRightBottomY = i == splitedByHeightMapsQuantity - 1 ? rightBottomTile.Y : currentLeftTopTile.Y - 1 + maxMapWidthHeight / tileSize;
 					var currentRightBottomTile = new Tile(currentRightBottomX, currentRightBottomY);
 
 					if (currentLeftTopTile.X > internationalDateLineTileX)
@@ -103,7 +105,7 @@ namespace GetMap
 			Tile tile;
 			if (model.LeftTopLon < model.RightBottomLon)
 			{
-				tile = strategy.Tile(model.LeftTopLat + (model.LeftTopLat - model.RightBottomLat) / 2, model.LeftTopLon + (model.RightBottomLon - model.LeftTopLon) / 2, model.Zoom);
+				tile = strategy.Tile(model.RightBottomLat + (model.LeftTopLat - model.RightBottomLat) / 2, model.LeftTopLon + (model.RightBottomLon - model.LeftTopLon) / 2, model.Zoom);
 			}
 			else
 			{

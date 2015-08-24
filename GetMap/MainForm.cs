@@ -241,7 +241,7 @@ namespace GetMap
 
 		private void emptyCacheButton_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show(Resources.MainForm_EmptyCacheMessage, Resources.MainForm_EmptyCacheHeader, MessageBoxButtons.OKCancel) == DialogResult.OK) ;
+			if (MessageBox.Show(Resources.MainForm_EmptyCacheMessage, Resources.MainForm_EmptyCacheHeader, MessageBoxButtons.OKCancel) == DialogResult.OK)
 				controller.EmptyCache();
 		}
 
