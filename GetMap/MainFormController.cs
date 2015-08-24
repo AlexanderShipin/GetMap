@@ -57,27 +57,27 @@ namespace GetMap
 			CheckMapSize(mapWidth, mapHeight);
 
 			//todo: dialog whether a user wants too many big maps here
-			int splitedByWidthMapsQuantity = (int) Math.Ceiling((decimal) (mapWidth) / maxMapWidthHeight);
-			int splitedByHeightMapsQuantity = (int) Math.Ceiling((decimal) (mapHeight) / maxMapWidthHeight);
+			int splitByWidthMapsQuantity = (int) Math.Ceiling((decimal) (mapWidth) / maxMapWidthHeight);
+			int splitByHeightMapsQuantity = (int) Math.Ceiling((decimal) (mapHeight) / maxMapWidthHeight);
 
 			string fileName = "no_file_name";
-			if (splitedByWidthMapsQuantity > 1 || splitedByHeightMapsQuantity > 1)
+			if (splitByWidthMapsQuantity > 1 || splitByHeightMapsQuantity > 1)
 			{
-				CreateFolderForSplittedMap(model, ref fileName);
+				CreateFolderForSplitMap(model, ref fileName);
 			}
 
 			tilesAttached = 0;
 			totalTilesQuantity = mapWidthInTiles * mapHeightInTiles;
-			for (int i = 0; i < splitedByHeightMapsQuantity; i++)
+			for (int i = 0; i < splitByHeightMapsQuantity; i++)
 			{
-				for (int j = 0; j < splitedByWidthMapsQuantity; j++)
+				for (int j = 0; j < splitByWidthMapsQuantity; j++)
 				{
-					int currentMapWidth = j == splitedByWidthMapsQuantity - 1 ? mapWidth - maxMapWidthHeight * j : maxMapWidthHeight;
-					int currentMapHeight = i == splitedByHeightMapsQuantity - 1 ? mapHeight - maxMapWidthHeight * i : maxMapWidthHeight;
+					int currentMapWidth = j == splitByWidthMapsQuantity - 1 ? mapWidth - maxMapWidthHeight * j : maxMapWidthHeight;
+					int currentMapHeight = i == splitByHeightMapsQuantity - 1 ? mapHeight - maxMapWidthHeight * i : maxMapWidthHeight;
 
 					var currentLeftTopTile = new Tile(leftTopTile.X + j * maxMapWidthHeight / tileSize, leftTopTile.Y + i * maxMapWidthHeight / tileSize);
-					int currentRightBottomX = j == splitedByWidthMapsQuantity - 1 ? rightBottomTile.X : currentLeftTopTile.X - 1 + maxMapWidthHeight / tileSize;
-					int currentRightBottomY = i == splitedByHeightMapsQuantity - 1 ? rightBottomTile.Y : currentLeftTopTile.Y - 1 + maxMapWidthHeight / tileSize;
+					int currentRightBottomX = j == splitByWidthMapsQuantity - 1 ? rightBottomTile.X : currentLeftTopTile.X - 1 + maxMapWidthHeight / tileSize;
+					int currentRightBottomY = i == splitByHeightMapsQuantity - 1 ? rightBottomTile.Y : currentLeftTopTile.Y - 1 + maxMapWidthHeight / tileSize;
 					var currentRightBottomTile = new Tile(currentRightBottomX, currentRightBottomY);
 
 					if (currentLeftTopTile.X > internationalDateLineTileX)
@@ -85,7 +85,7 @@ namespace GetMap
 					if (currentRightBottomTile.X > internationalDateLineTileX)
 						currentRightBottomTile.X = currentRightBottomTile.X - internationalDateLineTileX - 1;
 
-					if (splitedByWidthMapsQuantity > 1 || splitedByHeightMapsQuantity > 1)
+					if (splitByWidthMapsQuantity > 1 || splitByHeightMapsQuantity > 1)
 						model.Path = Path.GetDirectoryName(model.Path) + "\\" + fileName + "-" + (i + 1) + "-" + (j + 1) + ".png";
 
 					LoadTilesAndSaveMap(model, currentMapWidth, currentMapHeight, currentLeftTopTile, currentRightBottomTile, internationalDateLineTileX);
@@ -131,7 +131,7 @@ namespace GetMap
 			return map;
 		}
 
-		private static void CreateFolderForSplittedMap(MainFormModel model, ref string fileName)
+		private static void CreateFolderForSplitMap(MainFormModel model, ref string fileName)
 		{
 			//to avoid situation when map is saved to existing file but actually will be saved in several files (with old name and suffixes)
 			if (File.Exists(model.Path))
