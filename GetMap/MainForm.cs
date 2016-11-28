@@ -110,10 +110,20 @@ namespace GetMap
 				mainFormModel.MapSourceFormat.Add(selectedValue.Value);
 			}
 			mainFormModel.MapSourceName = ((KeyValuePair<string, KeyValuePair<string, string>>)sourceComboBox.SelectedItem).Value.Key;
-			mainFormModel.LeftTopLat = float.Parse(leftTopLatTextBox.Text, CultureInfo.InvariantCulture);
-			mainFormModel.LeftTopLon = float.Parse(leftTopLonTextBox.Text, CultureInfo.InvariantCulture);
-			mainFormModel.RightBottomLat = float.Parse(rightBottomLatTextBox.Text, CultureInfo.InvariantCulture);
-			mainFormModel.RightBottomLon = float.Parse(rightBottomLonTextBox.Text, CultureInfo.InvariantCulture);
+
+			float leftTopLat;
+			float.TryParse(leftTopLatTextBox.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-us"), out leftTopLat);
+			mainFormModel.LeftTopLat = leftTopLat;
+			float leftTopLon;
+			float.TryParse(leftTopLonTextBox.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-us"), out leftTopLon);
+			mainFormModel.LeftTopLon = leftTopLon;
+			float rightBottomLat;
+			float.TryParse(rightBottomLatTextBox.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-us"), out rightBottomLat);
+			mainFormModel.RightBottomLat = rightBottomLat;
+			float rightBottomLon;
+			float.TryParse(rightBottomLonTextBox.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-us"), out rightBottomLon);
+			mainFormModel.RightBottomLon = rightBottomLon;
+
 			mainFormModel.Zoom = zoomTrackBar.Value;
 			if (pathTextBox.Text == MainFormModel.DefaultMapPath)
 			{
