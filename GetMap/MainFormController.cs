@@ -49,7 +49,7 @@ namespace GetMap
 			else
 			{
 				mapWidthInTiles = (internationalDateLineTileX - leftTopTile.X + 1) + (rightBottomTile.X + 1);
-				mapHeightInTiles = rightBottomTile.Y - leftTopTile.X + 1;
+				mapHeightInTiles = rightBottomTile.Y - leftTopTile.Y + 1;
 			}
 			int mapWidth = tileSize * mapWidthInTiles;
 			int mapHeight = tileSize * mapHeightInTiles;
@@ -185,15 +185,13 @@ namespace GetMap
 
 		private void AttachTilesToMap(Graphics graphics, MainFormModel model, Tile leftTopTile, Tile rightBottomTile, int internationalDateLineTileX)
 		{
-			if (model.LeftTopLon < model.RightBottomLon)
-			{
-				AttachTilesIterations(graphics, model, leftTopTile.X, leftTopTile, rightBottomTile, -1);
-			}
-			else
+			if ((model.LeftTopLon >= model.RightBottomLon) && (leftTopTile.X > rightBottomTile.X))
 			{
 				AttachTilesIterations(graphics, model, leftTopTile.X, leftTopTile, new Tile(internationalDateLineTileX, rightBottomTile.Y), -1);
 				AttachTilesIterations(graphics, model, leftTopTile.X, new Tile(0, leftTopTile.Y), rightBottomTile, internationalDateLineTileX);
 			}
+			else
+				AttachTilesIterations(graphics, model, leftTopTile.X, leftTopTile, rightBottomTile, -1);
 		}
 
 		private void AttachTilesIterations(Graphics graphics, MainFormModel model, int tileXToContinueFrom, Tile leftTopTile, Tile rightBottomTile, int internationalDateLineTileX)
@@ -207,7 +205,8 @@ namespace GetMap
 					if (CheckCancellation())
 						break;
 					LoadAndAttachTileToMap(graphics, model, (internationalDateLineTileX + 1 + i - tileXToContinueFrom) * tileSize, (j - leftTopTile.Y) * tileSize, new Tile(i, j));
-					ReportProgress(++tilesAttached * 100 / totalTilesQuantity, String.Empty);
+					var percent = ++tilesAttached * 100d / totalTilesQuantity;
+					ReportProgress((int)percent, String.Empty);
 				}
 			}
 		}

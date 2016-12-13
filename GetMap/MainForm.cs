@@ -190,8 +190,10 @@ namespace GetMap
 				e.Handled = true;
 			}
 
-			// only allow one minus at the beginnig of the string
-			if (e.KeyChar == '-' && textBox != null && (textBox.Text.IndexOf('-') > -1 || textBox.SelectionStart != 0))
+			// only allow one minus at the beginning of the string
+			if (e.KeyChar == '-' && textBox != null
+			&& (textBox.SelectionLength != textBox.Text.Length)
+			&& (textBox.SelectionStart != 0 || textBox.Text.IndexOf('-') > -1))
 			{
 				e.Handled = true;
 			}
