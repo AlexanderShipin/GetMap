@@ -252,7 +252,12 @@ namespace GetMap
 						foreach (string sourceFormat in model.MapSourceFormat)
 						{
 							if (!string.IsNullOrEmpty(sourceFormat))
-								tileGraphics.DrawImage(LoadTile(sourceFormat, tile, model.Zoom), 0, 0, tileSize, tileSize);
+							{
+								using (var tileLayerImage = LoadTile(sourceFormat, tile, model.Zoom))
+								{
+									tileGraphics.DrawImage(tileLayerImage, 0, 0, tileSize, tileSize);
+								}
+							}
 						}
 					}
 					catch (WebException)
