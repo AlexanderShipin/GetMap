@@ -15,17 +15,17 @@ namespace GetMap
 	{
 		private MainFormModel model;
 		private Dictionary<string, KeyValuePair<string, string>> providers = new Dictionary<string, KeyValuePair<string, string>>
-			{
-				{Resources.MainForm_Providers_GoogleMap, new KeyValuePair<string, string>("GoogleMap", "http://mts.google.com/vt/x={0}&y={1}&z={2}&hl=en")},
-				{Resources.MainForm_Providers_GoogleSatellite, new KeyValuePair<string, string>("GoogleSatellite", "http://khms0.google.com/kh/v=873&x={0}&y={1}&z={2}")},
-				{Resources.MainForm_Providers_GoogleHybrid, new KeyValuePair<string, string>("GoogleHybrid", "http://mts.google.com/vt/lyrs=h&x={0}&y={1}&z={2}&hl=en")},
-				{Resources.MainForm_Providers_YandexMap, new KeyValuePair<string, string>("YandexMap", "http://vec.maps.yandex.net/tiles?l=map&x={0}&y={1}&z={2}&lang=ru_RU")},
-				{Resources.MainForm_Providers_YandexSatellite, new KeyValuePair<string, string>("YandexSatellite", "http://core-sat.maps.yandex.net/tiles?l=sat&x={0}&y={1}&z={2}&lang=ru_RU")},
-				{Resources.MainForm_Providers_YandexHybrid, new KeyValuePair<string, string>("YandexHybrid", "http://vec.maps.yandex.net/tiles?l=skl&x={0}&y={1}&z={2}&lang=ru_RU")},
-			};
-		private Regex regExCoordinate = new Regex(@"-?\d+(\.\d+)?");
-		private Regex regExTwoCoordinates = new Regex(@"(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+");
-		private Regex regExFourCoordinates = new Regex(@"(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+;\s?(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+");
+		{
+			{Resources.MainForm_Providers_GoogleMap, new KeyValuePair<string, string>("GoogleMap", "http://mts.google.com/vt/x={0}&y={1}&z={2}&hl=en")},
+			{Resources.MainForm_Providers_GoogleSatellite, new KeyValuePair<string, string>("GoogleSatellite", "http://khms0.google.com/kh/v=873&x={0}&y={1}&z={2}")},
+			{Resources.MainForm_Providers_GoogleHybrid, new KeyValuePair<string, string>("GoogleHybrid", "http://mts.google.com/vt/lyrs=h&x={0}&y={1}&z={2}&hl=en")},
+			{Resources.MainForm_Providers_YandexMap, new KeyValuePair<string, string>("YandexMap", "http://vec.maps.yandex.net/tiles?l=map&x={0}&y={1}&z={2}&lang=ru_RU")},
+			{Resources.MainForm_Providers_YandexSatellite, new KeyValuePair<string, string>("YandexSatellite", "http://core-sat.maps.yandex.net/tiles?l=sat&x={0}&y={1}&z={2}&lang=ru_RU")},
+			{Resources.MainForm_Providers_YandexHybrid, new KeyValuePair<string, string>("YandexHybrid", "http://vec.maps.yandex.net/tiles?l=skl&x={0}&y={1}&z={2}&lang=ru_RU")},
+		};
+		private readonly Regex regExCoordinate = new Regex(@"-?\d+(\.\d+)?");
+		private readonly Regex regExTwoCoordinates = new Regex(@"(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+");
+		private readonly Regex regExFourCoordinates = new Regex(@"(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+;\s?(-?\d+(\.\d+)?)+,\s?(-?\d+(\.\d+)?)+");
 		private MainFormController controller = new MainFormController();
 
 		private Stopwatch timeRecorder;
@@ -114,12 +114,15 @@ namespace GetMap
 			float leftTopLat;
 			float.TryParse(leftTopLatTextBox.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-us"), out leftTopLat);
 			mainFormModel.LeftTopLat = leftTopLat;
+
 			float leftTopLon;
 			float.TryParse(leftTopLonTextBox.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-us"), out leftTopLon);
 			mainFormModel.LeftTopLon = leftTopLon;
+
 			float rightBottomLat;
 			float.TryParse(rightBottomLatTextBox.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-us"), out rightBottomLat);
 			mainFormModel.RightBottomLat = rightBottomLat;
+
 			float rightBottomLon;
 			float.TryParse(rightBottomLonTextBox.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-us"), out rightBottomLon);
 			mainFormModel.RightBottomLon = rightBottomLon;
@@ -127,12 +130,12 @@ namespace GetMap
 			mainFormModel.Zoom = zoomTrackBar.Value;
 			if (pathTextBox.Text == MainFormModel.DefaultMapPath)
 			{
-				mainFormModel.Path = MainFormModel.DefaultMapPath + String.Format(MainFormModel.DefaultFileName, selectedValue.Key + "_" +
-																												 mainFormModel.LeftTopLat.ToString(CultureInfo.GetCultureInfo("en-us")) + "," +
-																												 mainFormModel.LeftTopLon.ToString(CultureInfo.GetCultureInfo("en-us")) + ";" +
-																												 mainFormModel.RightBottomLat.ToString(CultureInfo.GetCultureInfo("en-us")) + "," +
-																												 mainFormModel.RightBottomLon.ToString(CultureInfo.GetCultureInfo("en-us")) + "_" +
-																												 mainFormModel.Zoom);
+				var defaultFileName = selectedValue.Key + "_" + mainFormModel.LeftTopLat.ToString(CultureInfo.GetCultureInfo("en-us")) + "," +
+																mainFormModel.LeftTopLon.ToString(CultureInfo.GetCultureInfo("en-us")) + ";" +
+																mainFormModel.RightBottomLat.ToString(CultureInfo.GetCultureInfo("en-us")) + "," +
+																mainFormModel.RightBottomLon.ToString(CultureInfo.GetCultureInfo("en-us")) + "_" +
+																mainFormModel.Zoom;
+				mainFormModel.Path = MainFormModel.DefaultMapPath + String.Format(MainFormModel.DefaultFileName, defaultFileName);
 				if (showMessage)
 					MessageBox.Show(String.Format(Resources.MainForm_MapPathNotEntered, mainFormModel.Path), Resources.MainForm_Warning, MessageBoxButtons.OK);
 			}
